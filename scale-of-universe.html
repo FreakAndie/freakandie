@@ -1,0 +1,1036 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Scale of the Universe</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #00000f;
+    --star: #ffffff;
+    --accent: #00ffe7;
+    --accent2: #ff6b35;
+    --text: #c8d8e8;
+    --dim: #4a6080;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    overflow-x: hidden;
+    cursor: crosshair;
+  }
+
+  /* STAR FIELD */
+  #starfield {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* HEADER */
+  header {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    padding: 18px 32px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: linear-gradient(to bottom, rgba(0,0,15,0.95) 0%, transparent 100%);
+    border-bottom: 1px solid rgba(0,255,231,0.08);
+  }
+
+  header h1 {
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    text-transform: uppercase;
+  }
+
+  .coffee-btn {
+    background: transparent;
+    border: 1px solid var(--accent2);
+    color: var(--accent2);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.1em;
+    padding: 8px 16px;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.2s;
+    text-transform: uppercase;
+  }
+  .coffee-btn:hover {
+    background: var(--accent2);
+    color: #000;
+  }
+
+  /* SCALE BAR */
+  #scale-bar {
+    position: fixed;
+    left: 32px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0;
+    height: 60vh;
+  }
+
+  #scale-bar .bar-line {
+    width: 2px;
+    flex: 1;
+    background: linear-gradient(to bottom, transparent, var(--accent), transparent);
+    opacity: 0.4;
+  }
+
+  #scale-label {
+    position: fixed;
+    left: 50px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    font-family: 'Orbitron', monospace;
+    font-size: 0.65rem;
+    color: var(--accent);
+    letter-spacing: 0.2em;
+    writing-mode: vertical-rl;
+    text-orientation: mixed;
+    opacity: 0.5;
+  }
+
+  /* PROGRESS */
+  #progress-bar {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--accent), var(--accent2));
+    z-index: 200;
+    transition: width 0.1s;
+  }
+
+  /* SCROLL CONTAINER */
+  #scroll-container {
+    position: relative;
+    z-index: 10;
+  }
+
+  /* INTRO */
+  #intro {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 40px;
+    position: relative;
+  }
+
+  #intro .eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 1s 0.3s forwards;
+  }
+
+  #intro h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2.5rem, 8vw, 6rem);
+    font-weight: 900;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 24px;
+    opacity: 0;
+    animation: fadeUp 1s 0.6s forwards;
+  }
+
+  #intro h2 span {
+    color: var(--accent);
+    display: block;
+  }
+
+  #intro p {
+    max-width: 480px;
+    line-height: 1.8;
+    color: var(--dim);
+    font-size: 0.85rem;
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 1s 0.9s forwards;
+  }
+
+  .scroll-hint {
+    opacity: 0;
+    animation: fadeUp 1s 1.2s forwards;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    color: var(--dim);
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  .scroll-arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid var(--accent);
+    border-bottom: 2px solid var(--accent);
+    transform: rotate(45deg);
+    animation: bounce 1.5s infinite;
+  }
+
+  /* SECTIONS */
+  .scale-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding: 80px 80px 80px 120px;
+    position: relative;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+
+  .scale-section.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-content {
+    max-width: 500px;
+    position: relative;
+    z-index: 2;
+  }
+
+  .scale-tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.35em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 8px;
+    font-family: 'Orbitron', monospace;
+  }
+
+  .scale-size {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1;
+    margin-bottom: 16px;
+    letter-spacing: -0.02em;
+  }
+
+  .scale-name {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: var(--star);
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .scale-desc {
+    font-size: 0.8rem;
+    line-height: 1.9;
+    color: var(--text);
+    opacity: 0.75;
+  }
+
+  .scale-fact {
+    margin-top: 16px;
+    padding: 12px 16px;
+    border-left: 2px solid var(--accent2);
+    background: rgba(255,107,53,0.05);
+    font-size: 0.75rem;
+    line-height: 1.7;
+    color: var(--accent2);
+    font-style: italic;
+  }
+
+  /* VISUAL OBJECT */
+  .object-visual {
+    position: absolute;
+    left: 120px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+  }
+
+  .orb {
+    border-radius: 50%;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  /* Divider */
+  .scale-divider {
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(0,255,231,0.15), transparent);
+    margin: 0 120px;
+    position: relative;
+  }
+
+  .scale-divider::after {
+    content: '▼';
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--accent);
+    font-size: 0.6rem;
+    opacity: 0.3;
+  }
+
+  /* OUTRO */
+  #outro {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 40px;
+    position: relative;
+  }
+
+  #outro h2 {
+    font-family: 'Orbitron', monospace;
+    font-size: clamp(1.5rem, 4vw, 3rem);
+    font-weight: 900;
+    margin-bottom: 24px;
+    letter-spacing: 0.05em;
+  }
+
+  #outro p {
+    max-width: 540px;
+    line-height: 1.9;
+    color: var(--dim);
+    font-size: 0.85rem;
+    margin-bottom: 48px;
+  }
+
+  .coffee-big {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    background: transparent;
+    border: 2px solid var(--accent2);
+    color: var(--accent2);
+    font-family: 'Orbitron', monospace;
+    font-size: 0.85rem;
+    letter-spacing: 0.15em;
+    padding: 16px 32px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s;
+    cursor: pointer;
+  }
+
+  .coffee-big:hover {
+    background: var(--accent2);
+    color: #000;
+    box-shadow: 0 0 40px rgba(255,107,53,0.4);
+  }
+
+  /* ANIMATIONS */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: rotate(45deg) translateY(0); }
+    50% { transform: rotate(45deg) translateY(6px); }
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; transform: scale(1); }
+    50% { opacity: 1; transform: scale(1.05); }
+  }
+
+  @keyframes glow {
+    0%, 100% { box-shadow: 0 0 20px currentColor; }
+    50% { box-shadow: 0 0 60px currentColor; }
+  }
+
+  @keyframes spin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  /* Glow text */
+  .glow-accent { color: var(--accent); text-shadow: 0 0 20px rgba(0,255,231,0.5); }
+  .glow-orange { color: var(--accent2); text-shadow: 0 0 20px rgba(255,107,53,0.5); }
+  .glow-white { color: #fff; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+
+  /* HUD corners */
+  .hud-corner {
+    position: fixed;
+    z-index: 50;
+    width: 20px;
+    height: 20px;
+    opacity: 0.3;
+  }
+  .hud-corner.tl { top: 70px; left: 10px; border-top: 1px solid var(--accent); border-left: 1px solid var(--accent); }
+  .hud-corner.tr { top: 70px; right: 10px; border-top: 1px solid var(--accent); border-right: 1px solid var(--accent); }
+  .hud-corner.bl { bottom: 10px; left: 10px; border-bottom: 1px solid var(--accent); border-left: 1px solid var(--accent); }
+  .hud-corner.br { bottom: 10px; right: 10px; border-bottom: 1px solid var(--accent); border-right: 1px solid var(--accent); }
+
+  /* current size HUD */
+  #current-size-hud {
+    position: fixed;
+    bottom: 32px;
+    right: 32px;
+    z-index: 100;
+    text-align: right;
+  }
+  #current-size-hud .hud-label {
+    font-size: 0.6rem;
+    letter-spacing: 0.3em;
+    color: var(--dim);
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  #current-size-hud .hud-value {
+    font-family: 'Orbitron', monospace;
+    font-size: 1rem;
+    color: var(--accent);
+    font-weight: 700;
+  }
+  #current-size-hud .hud-name {
+    font-size: 0.7rem;
+    color: var(--dim);
+    margin-top: 2px;
+  }
+
+  @media (max-width: 700px) {
+    .scale-section { padding: 80px 24px 80px 24px; justify-content: center; }
+    .object-visual { display: none; }
+    #scale-bar { display: none; }
+    #scale-label { display: none; }
+    header h1 { font-size: 0.65rem; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<div id="progress-bar"></div>
+
+<!-- HUD corners -->
+<div class="hud-corner tl"></div>
+<div class="hud-corner tr"></div>
+<div class="hud-corner bl"></div>
+<div class="hud-corner br"></div>
+
+<!-- Current size HUD -->
+<div id="current-size-hud">
+  <div class="hud-label">Current Scale</div>
+  <div class="hud-value" id="hud-size">—</div>
+  <div class="hud-name" id="hud-name">Scroll to explore</div>
+</div>
+
+<header>
+  <h1>⬡ Scale of the Universe</h1>
+  <div style="display:flex;align-items:center;gap:12px">
+    <button id="sound-btn" onclick="toggleSound()" style="background:transparent;border:1px solid rgba(0,255,231,0.4);color:var(--accent);font-family:'Space Mono',monospace;font-size:0.7rem;letter-spacing:0.1em;padding:8px 14px;cursor:pointer;text-transform:uppercase;transition:all 0.2s">♪ Sound: OFF</button>
+    <a href="https://buymeacoffee.com/freakandie" target="_blank" class="coffee-btn">☕ Buy me a coffee</a>
+  </div>
+</header>
+
+<div id="scale-bar">
+  <div class="bar-line"></div>
+</div>
+<div id="scale-label">SCALE →</div>
+
+<div id="scroll-container">
+
+  <!-- INTRO -->
+  <section id="intro">
+    <div class="eyebrow">An interactive journey through size</div>
+    <h2>From the smallest<span>to the infinite.</span></h2>
+    <p>The universe spans 46 orders of magnitude — from quantum foam smaller than a proton to cosmic filaments billions of light-years wide. Scroll to traverse it all.</p>
+    <div class="scroll-hint">
+      <span>Scroll to begin</span>
+      <div class="scroll-arrow"></div>
+    </div>
+  </section>
+
+  <!-- SCALE SECTIONS -->
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="10⁻³⁵ m" data-name="Planck Length">
+    <div class="object-visual">
+      <div class="orb" style="width:6px;height:6px;background:white;box-shadow:0 0 30px #fff, 0 0 60px rgba(0,255,231,0.8);animation:glow 2s infinite;color:var(--accent)"></div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Quantum Foam</div>
+      <div class="scale-size glow-accent">10⁻³⁵ m</div>
+      <div class="scale-name">Planck Length</div>
+      <div class="scale-desc">The absolute smallest meaningful unit of length in physics. Below this scale, our understanding of space and time completely breaks down. Space itself may be quantized — grainy like pixels — at this level.</div>
+      <div class="scale-fact">If a proton were the size of the observable universe, the Planck length would be... about the size of a proton.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="10⁻¹⁸ m" data-name="Quark">
+    <div class="object-visual">
+      <div class="orb" style="width:14px;height:14px;background:radial-gradient(circle at 35% 35%, #ff6b35, #8b1a00);box-shadow:0 0 30px rgba(255,107,53,0.6);color:var(--accent2)"></div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Subatomic</div>
+      <div class="scale-size glow-orange">10⁻¹⁸ m</div>
+      <div class="scale-name">Quark</div>
+      <div class="scale-desc">Quarks are the fundamental building blocks of protons and neutrons. They come in six "flavors" — up, down, charm, strange, top, and bottom — and are held together by the strong nuclear force via gluons. A quark has never been observed in isolation.</div>
+      <div class="scale-fact">Quarks are so tightly bound that pulling them apart would create new quarks from the energy used — a phenomenon called "confinement."</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="10⁻¹⁵ m" data-name="Proton">
+    <div class="object-visual">
+      <div class="orb" style="width:30px;height:30px;background:radial-gradient(circle at 35% 35%, #7ecfff, #0066aa);box-shadow:0 0 40px rgba(0,180,255,0.5)"></div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Subatomic</div>
+      <div class="scale-size glow-accent">10⁻¹⁵ m</div>
+      <div class="scale-name">Proton</div>
+      <div class="scale-desc">Each proton is made of two "up" quarks and one "down" quark, bound by the strong force. The nucleus of every hydrogen atom is a single proton, making it the simplest nuclear structure in the universe.</div>
+      <div class="scale-fact">If a proton were the size of a football stadium, the electrons orbiting it would be specks of dust 50 km away — atoms are mostly empty space.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="10⁻¹⁰ m" data-name="Atom">
+    <div class="object-visual">
+      <div class="orb" style="width:60px;height:60px;background:radial-gradient(circle at 35% 35%, #a8ff78, #2d6a00);box-shadow:0 0 50px rgba(100,255,50,0.4)">
+        <div style="position:absolute;width:100%;height:100%;border:1px solid rgba(168,255,120,0.3);border-radius:50%;animation:spin 4s linear infinite;transform:rotateX(70deg)"></div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Atomic</div>
+      <div class="scale-size glow-white">10⁻¹⁰ m</div>
+      <div class="scale-name">Atom</div>
+      <div class="scale-desc">The atom — from the Greek "atomos" meaning indivisible — is the basic unit of matter. A dense nucleus of protons and neutrons is surrounded by a cloud of electrons. Everything you can see or touch is made of these tiny structures.</div>
+      <div class="scale-fact">A human hair is about 1 million carbon atoms wide. There are more atoms in a grain of sand than stars in the observable universe.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="10⁻⁷ m" data-name="Virus">
+    <div class="object-visual">
+      <div class="orb" style="width:80px;height:80px;background:radial-gradient(circle at 35% 35%, #ff9fff, #7700aa);box-shadow:0 0 50px rgba(200,50,255,0.4)"></div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Nanoscale</div>
+      <div class="scale-size" style="color:#cc77ff">10⁻⁷ m</div>
+      <div class="scale-name">Virus</div>
+      <div class="scale-desc">Viruses occupy a haunting middle ground — not quite alive, not quite inert. They are genetic code wrapped in protein, hijacking living cells to replicate. COVID-19 is about 100 nanometers. Bacteria are typically 10–100× larger.</div>
+      <div class="scale-fact">You could line up 1,000 coronavirus particles across the width of a human hair.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="10⁻⁵ m" data-name="Human Cell">
+    <div class="object-visual">
+      <div class="orb" style="width:100px;height:100px;background:radial-gradient(circle at 40% 40%, #ffee88, #cc7700);box-shadow:0 0 60px rgba(255,200,50,0.3)">
+        <div style="position:absolute;width:40%;height:40%;background:radial-gradient(circle,rgba(255,255,200,0.8),rgba(200,100,0,0.5));border-radius:50%;top:30%;left:30%"></div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Cellular</div>
+      <div class="scale-size" style="color:#ffcc44">10⁻⁵ m</div>
+      <div class="scale-name">Human Cell</div>
+      <div class="scale-desc">The basic unit of life. A typical human cell is about 10 micrometers — visible under a light microscope. Inside each of your ~37 trillion cells is about 2 meters of DNA, packed into a nucleus smaller than a speck of dust.</div>
+      <div class="scale-fact">If all the DNA in your body were stretched out end to end, it would reach the Sun and back about 300 times.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="1.7 m" data-name="Human Being">
+    <div class="object-visual">
+      <div style="width:30px;height:90px;position:relative">
+        <div style="width:20px;height:20px;background:radial-gradient(circle,#ffddbb,#cc9966);border-radius:50%;margin:0 auto 4px;box-shadow:0 0 20px rgba(255,220,150,0.4)"></div>
+        <div style="width:24px;height:42px;background:linear-gradient(to bottom,#4488ff,#2255aa);border-radius:4px;margin:0 auto 4px;box-shadow:0 0 20px rgba(50,100,255,0.3)"></div>
+        <div style="display:flex;justify-content:center;gap:4px">
+          <div style="width:10px;height:28px;background:#2255aa;border-radius:0 0 3px 3px"></div>
+          <div style="width:10px;height:28px;background:#2255aa;border-radius:0 0 3px 3px"></div>
+        </div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Human Scale</div>
+      <div class="scale-size glow-white">~1.7 m</div>
+      <div class="scale-name">Human Being</div>
+      <div class="scale-desc">You. Right here. A collection of 37 trillion cells, 206 bones, approximately 86 billion neurons, all working in concert. The universe needed 13.8 billion years of cosmic evolution to produce a being complex enough to contemplate its own scale.</div>
+      <div class="scale-fact">You are simultaneously unimaginably large compared to a quark and incomprehensibly tiny compared to a galaxy.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="12,742 km" data-name="Earth">
+    <div class="object-visual">
+      <div class="orb" style="width:120px;height:120px;background:radial-gradient(circle at 35% 35%, #55aaff, #0033aa);box-shadow:0 0 80px rgba(50,100,255,0.4), 0 0 20px rgba(50,100,255,0.6)">
+        <div style="position:absolute;top:15%;left:20%;width:25%;height:20%;background:rgba(50,180,50,0.7);border-radius:40%"></div>
+        <div style="position:absolute;top:40%;left:55%;width:20%;height:25%;background:rgba(50,180,50,0.7);border-radius:40%"></div>
+        <div style="position:absolute;top:60%;left:25%;width:30%;height:15%;background:rgba(50,180,50,0.6);border-radius:40%"></div>
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 70% 30%,rgba(255,255,255,0.15),transparent 60%);border-radius:50%"></div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Planetary</div>
+      <div class="scale-size glow-accent">12,742 km</div>
+      <div class="scale-name">Earth</div>
+      <div class="scale-desc">Our home — a rocky, water-covered world orbiting a medium star. Earth's diameter is 12,742 km, yet its entire atmosphere is a thin skin less than 1% of that width. From the Moon, you can cover the entire Earth with your thumb.</div>
+      <div class="scale-fact">If Earth were shrunk to the size of a billiard ball, it would actually be smoother than the ball — Mount Everest would be barely detectable.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="1,392,700 km" data-name="The Sun">
+    <div class="object-visual">
+      <div class="orb" style="width:140px;height:140px;background:radial-gradient(circle at 35% 35%, #fff7aa, #ff9900, #ff4400);box-shadow:0 0 100px rgba(255,150,0,0.6), 0 0 200px rgba(255,100,0,0.2);animation:pulse 3s ease-in-out infinite">
+        <div style="position:absolute;inset:0;background:radial-gradient(circle at 60% 30%,rgba(255,255,200,0.3),transparent 60%);border-radius:50%"></div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Stellar</div>
+      <div class="scale-size glow-orange">1,392,700 km</div>
+      <div class="scale-name">The Sun</div>
+      <div class="scale-desc">Our star — a massive sphere of plasma undergoing nuclear fusion at its core, converting 4 million tons of mass into energy every second. The Sun contains 99.86% of the solar system's total mass. 1.3 million Earths could fit inside it.</div>
+      <div class="scale-fact">The light reaching your eyes right now left the Sun 8 minutes and 20 seconds ago. The energy itself took 100,000 years to travel from the Sun's core to its surface.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="1.4 × 10¹³ km" data-name="Solar System">
+    <div class="object-visual">
+      <div style="width:140px;height:140px;position:relative">
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);width:24px;height:24px;border-radius:50%;background:radial-gradient(circle,#fff7aa,#ff9900);box-shadow:0 0 30px rgba(255,180,0,0.8)"></div>
+        <div style="position:absolute;top:50%;left:50%;width:60px;height:60px;border:1px solid rgba(0,255,231,0.2);border-radius:50%;transform:translate(-50%,-50%)"></div>
+        <div style="position:absolute;top:50%;left:50%;width:90px;height:90px;border:1px solid rgba(0,255,231,0.15);border-radius:50%;transform:translate(-50%,-50%)"></div>
+        <div style="position:absolute;top:50%;left:50%;width:130px;height:130px;border:1px solid rgba(0,255,231,0.1);border-radius:50%;transform:translate(-50%,-50%)"></div>
+        <div style="position:absolute;top:18px;left:50%;width:6px;height:6px;background:#cc9966;border-radius:50%;transform:translateX(-50%)"></div>
+        <div style="position:absolute;top:50%;left:8px;width:8px;height:8px;background:#cc6644;border-radius:50%;transform:translateY(-50%)"></div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Planetary System</div>
+      <div class="scale-size glow-accent">~1.4×10¹³ km</div>
+      <div class="scale-name">Solar System</div>
+      <div class="scale-desc">The Sun and everything gravitationally bound to it: 8 planets, 5 dwarf planets, hundreds of moons, millions of asteroids, and billions of comets. The outer edge (the heliopause) is where the solar wind stops — about 120 AU from the Sun.</div>
+      <div class="scale-fact">The Voyager 1 probe was launched in 1977 and only crossed into interstellar space in 2012. At 17 km/s, it still takes tens of thousands of years to reach the nearest star.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="4.24 light-years" data-name="Nearest Star">
+    <div class="object-visual">
+      <div style="width:140px;height:140px;position:relative;display:flex;align-items:center;justify-content:center">
+        <div style="width:10px;height:10px;background:#ffaaaa;border-radius:50%;box-shadow:0 0 20px rgba(255,150,150,0.8);position:absolute;top:20%;left:35%"></div>
+        <div style="width:6px;height:6px;background:#ff7777;border-radius:50%;box-shadow:0 0 10px rgba(255,100,100,0.6);position:absolute;top:28%;left:55%"></div>
+        <div style="position:absolute;bottom:30%;left:20%;font-size:0.5rem;color:var(--accent);letter-spacing:0.1em;font-family:Orbitron,monospace">YOU ARE HERE</div>
+        <div style="position:absolute;bottom:30%;left:20%;width:40px;height:1px;background:rgba(0,255,231,0.3)"></div>
+        <div style="position:absolute;bottom:32%;left:60%;width:4px;height:4px;background:var(--accent);border-radius:50%;box-shadow:0 0 10px var(--accent)"></div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Interstellar</div>
+      <div class="scale-size glow-orange">4.24 light-years</div>
+      <div class="scale-name">Proxima Centauri</div>
+      <div class="scale-desc">The nearest star to our Sun — Proxima Centauri, part of the Alpha Centauri triple system. A red dwarf star smaller and dimmer than our Sun. At the current speed of our fastest spacecraft, it would take about 75,000 years to reach it.</div>
+      <div class="scale-fact">If the Sun were a basketball in New York City, Proxima Centauri would be another basketball in Los Angeles.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="100,000 light-years" data-name="Milky Way Galaxy">
+    <div class="object-visual">
+      <div style="width:140px;height:140px;position:relative;display:flex;align-items:center;justify-content:center">
+        <div class="orb" style="width:140px;height:50px;background:radial-gradient(ellipse at center,rgba(255,255,200,0.8) 0%,rgba(150,130,255,0.3) 40%,transparent 70%);border-radius:50%;position:absolute;box-shadow:0 0 60px rgba(180,160,255,0.3)"></div>
+        <div style="position:absolute;width:100%;height:100%;border-radius:50%;background:radial-gradient(ellipse at center,rgba(255,255,220,0.1),transparent 60%);transform:rotateX(80deg)"></div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Galactic</div>
+      <div class="scale-size" style="color:#bbaaff;text-shadow:0 0 20px rgba(180,150,255,0.5)">100,000 ly</div>
+      <div class="scale-name">Milky Way Galaxy</div>
+      <div class="scale-desc">Our home galaxy — a barred spiral containing 200–400 billion stars, at least as many planets, and a supermassive black hole (Sagittarius A*) at its center with the mass of 4 million suns. Our solar system is about 26,000 light-years from the center.</div>
+      <div class="scale-fact">If the Milky Way were shrunk to the size of the continental United States, our solar system would be about the size of a single quarter.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="2,537,000 light-years" data-name="Andromeda Galaxy">
+    <div class="object-visual">
+      <div style="width:140px;height:100px;position:relative">
+        <div style="position:absolute;top:10%;left:10%;width:60%;height:40%;background:radial-gradient(ellipse,rgba(255,200,150,0.7),rgba(200,180,255,0.2),transparent 70%);border-radius:50%;transform:rotate(-30deg)"></div>
+        <div style="position:absolute;top:40%;left:30%;width:50%;height:35%;background:radial-gradient(ellipse,rgba(255,220,180,0.5),rgba(180,160,255,0.15),transparent 70%);border-radius:50%;transform:rotate(15deg)"></div>
+        <div style="position:absolute;top:5%;right:5%;width:8px;height:8px;background:rgba(0,255,231,0.6);border-radius:50%;box-shadow:0 0 10px var(--accent)"></div>
+        <div style="position:absolute;top:8%;right:7%;font-size:0.45rem;color:var(--accent);font-family:Orbitron">US</div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Intergalactic</div>
+      <div class="scale-size" style="color:#ddccff">2.5 million ly</div>
+      <div class="scale-name">Andromeda Galaxy</div>
+      <div class="scale-desc">Our nearest large galactic neighbor, visible to the naked eye as a faint smudge. Andromeda is on a collision course with the Milky Way — but don't panic. The merger will begin in about 4.5 billion years, and because galaxies are mostly empty space, few stars will actually collide.</div>
+      <div class="scale-fact">Andromeda contains about 1 trillion stars — roughly twice as many as our Milky Way.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="10 million light-years" data-name="Local Group">
+    <div class="object-visual">
+      <div style="width:140px;height:140px;position:relative">
+        <div style="position:absolute;top:25%;left:20%;width:40px;height:14px;background:radial-gradient(ellipse,rgba(255,200,150,0.6),transparent);border-radius:50%;transform:rotate(-20deg)"></div>
+        <div style="position:absolute;top:40%;left:55%;width:50px;height:18px;background:radial-gradient(ellipse,rgba(200,180,255,0.5),transparent);border-radius:50%;transform:rotate(10deg)"></div>
+        <div style="position:absolute;top:65%;left:30%;width:20px;height:8px;background:radial-gradient(ellipse,rgba(255,255,200,0.4),transparent);border-radius:50%"></div>
+        <div style="position:absolute;top:15%;right:15%;width:14px;height:5px;background:radial-gradient(ellipse,rgba(200,200,255,0.4),transparent);border-radius:50%"></div>
+        <div style="position:absolute;inset:0;border:1px dashed rgba(0,255,231,0.08);border-radius:50%"></div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Galaxy Group</div>
+      <div class="scale-size" style="color:#aaddff">~10 million ly</div>
+      <div class="scale-name">The Local Group</div>
+      <div class="scale-desc">The cluster of galaxies that includes our Milky Way, Andromeda, and about 54 smaller satellite galaxies. All are gravitationally bound and will eventually merge into one massive elliptical galaxy in the far future.</div>
+      <div class="scale-fact">The Large Magellanic Cloud — a dwarf galaxy orbiting the Milky Way — is slowly being consumed by our galaxy's gravity.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <section class="scale-section" data-size="93 billion light-years" data-name="Observable Universe">
+    <div class="object-visual">
+      <div style="width:140px;height:140px;position:relative;display:flex;align-items:center;justify-content:center">
+        <div style="width:140px;height:140px;border:1px solid rgba(0,255,231,0.1);border-radius:50%;position:absolute;animation:pulse 4s ease-in-out infinite"></div>
+        <div style="width:100px;height:100px;border:1px solid rgba(0,255,231,0.08);border-radius:50%;position:absolute"></div>
+        <div style="width:60px;height:60px;border:1px solid rgba(0,255,231,0.06);border-radius:50%;position:absolute"></div>
+        <div style="width:4px;height:4px;background:var(--accent);border-radius:50%;box-shadow:0 0 20px var(--accent),0 0 40px rgba(0,255,231,0.4)"></div>
+        <!-- scattered dots like galaxies -->
+        <div style="position:absolute;width:3px;height:3px;background:rgba(255,255,200,0.6);border-radius:50%;top:15%;left:25%"></div>
+        <div style="position:absolute;width:2px;height:2px;background:rgba(200,200,255,0.5);border-radius:50%;top:70%;left:65%"></div>
+        <div style="position:absolute;width:3px;height:3px;background:rgba(255,220,180,0.5);border-radius:50%;top:55%;left:15%"></div>
+        <div style="position:absolute;width:2px;height:2px;background:rgba(200,255,200,0.4);border-radius:50%;top:25%;left:75%"></div>
+        <div style="position:absolute;width:4px;height:4px;background:rgba(255,200,150,0.5);border-radius:50%;top:80%;left:40%"></div>
+      </div>
+    </div>
+    <div class="section-content">
+      <div class="scale-tag">Category: Cosmic</div>
+      <div class="scale-size glow-accent">93 billion ly</div>
+      <div class="scale-name">The Observable Universe</div>
+      <div class="scale-desc">The sphere of space visible from Earth — limited by the speed of light and the age of the universe. It contains an estimated 2 trillion galaxies, each with hundreds of billions of stars. And this is only what we can observe — the actual universe is almost certainly far, far larger.</div>
+      <div class="scale-fact">The most distant light we can observe — the Cosmic Microwave Background — is a snapshot of the universe just 380,000 years after the Big Bang, when atoms first formed.</div>
+    </div>
+  </section>
+
+  <div class="scale-divider"></div>
+
+  <!-- OUTRO -->
+  <section id="outro">
+    <h2>You are made of <span class="glow-accent">stardust.</span></h2>
+    <p>Every atom in your body heavier than hydrogen was forged in the heart of a dying star. You are the universe experiencing itself. From the Planck length to the cosmic horizon — it is all connected, and you are part of it.</p>
+    <a href="https://buymeacoffee.com/freakandie" target="_blank" class="coffee-big">☕ Enjoyed this? Buy me a coffee</a>
+  </section>
+
+</div>
+
+<script>
+// STARFIELD
+(function() {
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    stars = [];
+    for (let i = 0; i < 300; i++) {
+      stars.push({
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        r: Math.random() * 1.2,
+        a: Math.random(),
+        speed: Math.random() * 0.003 + 0.001
+      });
+    }
+  }
+
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    stars.forEach(s => {
+      s.a += s.speed;
+      const alpha = 0.3 + 0.7 * Math.abs(Math.sin(s.a));
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${alpha})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  resize();
+  window.addEventListener('resize', resize);
+  draw();
+})();
+
+// SCROLL EFFECTS
+const sections = document.querySelectorAll('.scale-section');
+const progressBar = document.getElementById('progress-bar');
+const hudSize = document.getElementById('hud-size');
+const hudName = document.getElementById('hud-name');
+
+let currentSection = null;
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      const size = entry.target.dataset.size;
+      const name = entry.target.dataset.name;
+      if (size) {
+        hudSize.textContent = size;
+        hudName.textContent = name;
+      }
+    }
+  });
+}, { threshold: 0.3 });
+
+sections.forEach(s => observer.observe(s));
+
+window.addEventListener('scroll', () => {
+  const scrolled = window.scrollY;
+  const total = document.body.scrollHeight - window.innerHeight;
+  const pct = (scrolled / total) * 100;
+  progressBar.style.width = pct + '%';
+  if (audioStarted) updateSound(pct / 100);
+});
+
+// ─── SOUND ENGINE ───────────────────────────────────────────────
+let audioCtx = null;
+let audioStarted = false;
+let masterGain = null;
+
+// Oscillator nodes
+let drones = [];      // base tone layers
+let shimmer = null;   // high shimmer
+let rumble = null;    // low sub rumble
+let noiseNode = null; // space noise
+let noiseGain = null;
+
+// Scale-mapped sound profiles: [baseFq, shimmerFq, rumbleFq, noiseAmt, detune]
+// Progress 0 = quantum, 1 = cosmic
+const soundProfiles = [
+  { base: 880,  shimmer: 2200, rumble: 20,  noise: 0.05, detune: 40  }, // 0.0 quantum
+  { base: 660,  shimmer: 1760, rumble: 28,  noise: 0.08, detune: 30  }, // 0.1 subatomic
+  { base: 528,  shimmer: 1320, rumble: 35,  noise: 0.10, detune: 20  }, // 0.2 atomic
+  { base: 396,  shimmer: 990,  rumble: 45,  noise: 0.12, detune: 15  }, // 0.3 nano/bio
+  { base: 264,  shimmer: 660,  rumble: 55,  noise: 0.15, detune: 10  }, // 0.4 human
+  { base: 174,  shimmer: 440,  rumble: 40,  noise: 0.18, detune: 8   }, // 0.5 planetary
+  { base: 110,  shimmer: 280,  rumble: 30,  noise: 0.20, detune: 6   }, // 0.6 stellar
+  { base: 74,   shimmer: 185,  rumble: 22,  noise: 0.22, detune: 5   }, // 0.7 solar system
+  { base: 55,   shimmer: 130,  rumble: 18,  noise: 0.25, detune: 4   }, // 0.8 galactic
+  { base: 36,   shimmer: 88,   rumble: 12,  noise: 0.28, detune: 3   }, // 0.9 intergalactic
+  { base: 24,   shimmer: 55,   rumble: 8,   noise: 0.30, detune: 2   }, // 1.0 cosmic
+];
+
+function lerp(a, b, t) { return a + (b - a) * t; }
+
+function getProfile(progress) {
+  const scaled = progress * (soundProfiles.length - 1);
+  const i = Math.floor(scaled);
+  const t = scaled - i;
+  const a = soundProfiles[Math.min(i, soundProfiles.length - 1)];
+  const b = soundProfiles[Math.min(i + 1, soundProfiles.length - 1)];
+  return {
+    base:    lerp(a.base,    b.base,    t),
+    shimmer: lerp(a.shimmer, b.shimmer, t),
+    rumble:  lerp(a.rumble,  b.rumble,  t),
+    noise:   lerp(a.noise,   b.noise,   t),
+    detune:  lerp(a.detune,  b.detune,  t),
+  };
+}
+
+function createNoise(ctx) {
+  const bufferSize = ctx.sampleRate * 4;
+  const buffer = ctx.createBuffer(1, bufferSize, ctx.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < bufferSize; i++) data[i] = Math.random() * 2 - 1;
+  const source = ctx.createBufferSource();
+  source.buffer = buffer;
+  source.loop = true;
+  return source;
+}
+
+function initAudio() {
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+  masterGain.connect(audioCtx.destination);
+
+  const compressor = audioCtx.createDynamicsCompressor();
+  compressor.connect(masterGain);
+
+  // Reverb (convolver with synthetic impulse)
+  const convolver = audioCtx.createConvolver();
+  const reverbLen = audioCtx.sampleRate * 4;
+  const reverbBuf = audioCtx.createBuffer(2, reverbLen, audioCtx.sampleRate);
+  for (let ch = 0; ch < 2; ch++) {
+    const d = reverbBuf.getChannelData(ch);
+    for (let i = 0; i < reverbLen; i++) d[i] = (Math.random() * 2 - 1) * Math.pow(1 - i / reverbLen, 2.5);
+  }
+  convolver.buffer = reverbBuf;
+  const reverbGain = audioCtx.createGain();
+  reverbGain.gain.value = 0.5;
+  convolver.connect(reverbGain);
+  reverbGain.connect(compressor);
+
+  // Drone oscillators (3 detuned layers for thickness)
+  drones = [];
+  for (let i = 0; i < 3; i++) {
+    const osc = audioCtx.createOscillator();
+    osc.type = i === 0 ? 'sine' : i === 1 ? 'triangle' : 'sine';
+    osc.frequency.value = 880;
+    const g = audioCtx.createGain();
+    g.gain.value = i === 0 ? 0.4 : i === 1 ? 0.15 : 0.1;
+    osc.connect(g);
+    g.connect(convolver);
+    g.connect(compressor);
+    osc.start();
+    drones.push({ osc, gain: g });
+  }
+
+  // Shimmer high oscillator
+  shimmer = audioCtx.createOscillator();
+  shimmer.type = 'sine';
+  shimmer.frequency.value = 2200;
+  const shimmerGain = audioCtx.createGain();
+  shimmerGain.gain.value = 0.04;
+  shimmer.connect(shimmerGain);
+  shimmerGain.connect(convolver);
+  shimmer.start();
+
+  // Sub rumble
+  rumble = audioCtx.createOscillator();
+  rumble.type = 'sine';
+  rumble.frequency.value = 20;
+  const rumbleGain = audioCtx.createGain();
+  rumbleGain.gain.value = 0.25;
+  rumble.connect(rumbleGain);
+  rumbleGain.connect(compressor);
+  rumble.start();
+
+  // Space noise (filtered)
+  noiseNode = createNoise(audioCtx);
+  const noiseFilter = audioCtx.createBiquadFilter();
+  noiseFilter.type = 'bandpass';
+  noiseFilter.frequency.value = 600;
+  noiseFilter.Q.value = 0.5;
+  noiseGain = audioCtx.createGain();
+  noiseGain.gain.value = 0;
+  noiseNode.connect(noiseFilter);
+  noiseFilter.connect(noiseGain);
+  noiseGain.connect(convolver);
+  noiseNode.start();
+
+  // LFO for gentle shimmer tremolo
+  const lfo = audioCtx.createOscillator();
+  lfo.frequency.value = 0.15;
+  const lfoGain = audioCtx.createGain();
+  lfoGain.gain.value = 0.02;
+  lfo.connect(lfoGain);
+  lfoGain.connect(shimmerGain.gain);
+  lfo.start();
+
+  audioStarted = true;
+
+  // Fade in
+  masterGain.gain.linearRampToValueAtTime(0.7, audioCtx.currentTime + 2.5);
+
+  // Set initial sound to current scroll position
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+  updateSound(isNaN(pct) ? 0 : pct);
+}
+
+function updateSound(progress) {
+  if (!audioCtx || !audioStarted) return;
+  const p = getProfile(Math.max(0, Math.min(1, progress)));
+  const t = audioCtx.currentTime;
+  const ramp = 1.5;
+
+  // Drone frequencies (slight detuning between layers for richness)
+  drones[0].osc.frequency.linearRampToValueAtTime(p.base, t + ramp);
+  drones[1].osc.frequency.linearRampToValueAtTime(p.base * 1.5, t + ramp);
+  drones[2].osc.frequency.linearRampToValueAtTime(p.base * (1 + p.detune / 1200), t + ramp);
+
+  shimmer.frequency.linearRampToValueAtTime(p.shimmer, t + ramp);
+  rumble.frequency.linearRampToValueAtTime(p.rumble, t + ramp);
+  noiseGain.gain.linearRampToValueAtTime(p.noise * 0.15, t + ramp);
+}
+
+function toggleSound() {
+  const btn = document.getElementById('sound-btn');
+  if (!audioStarted) {
+    initAudio();
+    btn.textContent = '♪ Sound: ON';
+    btn.style.borderColor = 'var(--accent)';
+    btn.style.color = 'var(--accent)';
+    btn.style.background = 'rgba(0,255,231,0.08)';
+  } else {
+    if (masterGain.gain.value > 0) {
+      masterGain.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 1);
+      btn.textContent = '♪ Sound: OFF';
+      btn.style.borderColor = 'rgba(0,255,231,0.4)';
+      btn.style.background = 'transparent';
+    } else {
+      masterGain.gain.linearRampToValueAtTime(0.7, audioCtx.currentTime + 1);
+      btn.textContent = '♪ Sound: ON';
+      btn.style.borderColor = 'var(--accent)';
+      btn.style.background = 'rgba(0,255,231,0.08)';
+    }
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>freakandie.com — Free Candy for Your Brain</title>
+<meta name="description" content="Andie's lab of free interactive experiences. Brain candy, served fresh. No tricks, no cost — just pure delight.">
+<link href="https://fonts.googleapis.com/css2?family=Lobster&family=Share+Tech+Mono&family=Abril+Fatface&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0d0a14;
+    --candy1: #ff3cac;
+    --candy2: #00ffe7;
+    --candy3: #ffe600;
+    --candy4: #ff6b35;
+    --text: #e8dff5;
+    --dim: #6a5a8a;
+    --card-bg: rgba(255,255,255,0.03);
+    --card-border: rgba(255,255,255,0.07);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Share Tech Mono', monospace;
+    overflow-x: hidden;
+    cursor: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='4' fill='%23ff3cac' opacity='0.8'/%3E%3C/svg%3E") 12 12, crosshair;
+  }
+
+  /* BACKGROUND */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    background-image:
+      linear-gradient(rgba(255,60,172,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,60,172,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .bg-glow {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 20%, rgba(255,60,172,0.08) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 40% at 80% 70%, rgba(0,255,231,0.06) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 50% 50%, rgba(255,230,0,0.03) 0%, transparent 70%);
+  }
+
+  /* FLOATING PARTICLES */
+  #particles { position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+  .particle {
+    position: absolute;
+    border-radius: 50%;
+    animation: floatUp linear infinite;
+    opacity: 0;
+  }
+  @keyframes floatUp {
+    0%   { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 0.6; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  /* WRAPPER */
+  .wrapper {
+    position: relative;
+    z-index: 10;
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 0 24px;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    padding: 80px 24px 60px;
+    position: relative;
+  }
+
+  .flask-icon {
+    font-size: 3.5rem;
+    margin-bottom: 16px;
+    display: inline-block;
+    animation: wobble 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(255,60,172,0.6));
+  }
+
+  @keyframes wobble {
+    0%, 100% { transform: rotate(-8deg); }
+    50%       { transform: rotate(8deg); }
+  }
+
+  .hero-eyebrow {
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--candy1);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.2s forwards;
+  }
+
+  .hero-title {
+    font-family: 'Abril Fatface', serif;
+    font-size: clamp(3.5rem, 12vw, 8rem);
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.4s forwards;
+  }
+
+  .hero-title .freak {
+    color: var(--candy1);
+    display: inline-block;
+    text-shadow: 0 0 40px rgba(255,60,172,0.5);
+  }
+  .hero-title .andie {
+    color: var(--candy3);
+    display: inline-block;
+    text-shadow: 0 0 40px rgba(255,230,0,0.4);
+  }
+  .hero-title .dot-com {
+    color: var(--dim);
+    font-size: 0.4em;
+    vertical-align: super;
+  }
+
+  .hero-subtitle {
+    font-family: 'Lobster', cursive;
+    font-size: clamp(1.2rem, 4vw, 2rem);
+    color: var(--candy2);
+    margin-bottom: 32px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.6s forwards;
+    text-shadow: 0 0 20px rgba(0,255,231,0.4);
+  }
+
+  .hero-bio {
+    max-width: 520px;
+    font-size: 0.82rem;
+    line-height: 1.9;
+    color: var(--dim);
+    margin-bottom: 48px;
+    opacity: 0;
+    animation: fadeUp 0.8s 0.8s forwards;
+  }
+
+  .hero-bio strong {
+    color: var(--text);
+  }
+
+  .hero-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    margin-bottom: 56px;
+    opacity: 0;
+    animation: fadeUp 0.8s 1s forwards;
+  }
+
+  .tag {
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    padding: 5px 12px;
+    border: 1px solid;
+    text-transform: uppercase;
+  }
+  .tag-pink  { border-color: rgba(255,60,172,0.4);  color: var(--candy1); }
+  .tag-cyan  { border-color: rgba(0,255,231,0.4);   color: var(--candy2); }
+  .tag-yellow{ border-color: rgba(255,230,0,0.4);   color: var(--candy3); }
+  .tag-orange{ border-color: rgba(255,107,53,0.4);  color: var(--candy4); }
+
+  .scroll-hint {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    color: var(--dim);
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 0.8s 1.2s forwards;
+  }
+  .scroll-arrow {
+    width: 18px; height: 18px;
+    border-right: 2px solid var(--candy1);
+    border-bottom: 2px solid var(--candy1);
+    transform: rotate(45deg);
+    animation: bounce 1.5s infinite;
+  }
+
+  /* ── DIVIDER ── */
+  .section-divider {
+    text-align: center;
+    padding: 48px 0 32px;
+    position: relative;
+  }
+  .section-divider::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(to right, transparent, rgba(255,60,172,0.2), transparent);
+  }
+  .section-divider span {
+    position: relative;
+    background: var(--bg);
+    padding: 0 20px;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: var(--candy1);
+    text-transform: uppercase;
+  }
+
+  /* ── CANDY SECTION ── */
+  .candy-section {
+    padding: 0 0 80px;
+  }
+
+  .candy-section-title {
+    font-family: 'Abril Fatface', serif;
+    font-size: 2rem;
+    color: var(--text);
+    margin-bottom: 8px;
+    text-align: center;
+  }
+  .candy-section-sub {
+    text-align: center;
+    color: var(--dim);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+    margin-bottom: 48px;
+  }
+
+  /* ── CANDY CARD ── */
+  .candy-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.3s, transform 0.3s;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px;
+    align-items: center;
+  }
+  .candy-card:hover {
+    border-color: rgba(255,60,172,0.3);
+    transform: translateY(-2px);
+  }
+  .candy-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--candy1), var(--candy2));
+  }
+  .candy-card .bg-num {
+    position: absolute;
+    right: -10px;
+    bottom: -20px;
+    font-family: 'Abril Fatface', serif;
+    font-size: 8rem;
+    color: rgba(255,255,255,0.02);
+    line-height: 1;
+    pointer-events: none;
+    user-select: none;
+  }
+
+  .candy-num {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--candy1);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+
+  .candy-name {
+    font-family: 'Abril Fatface', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    color: var(--text);
+    line-height: 1.1;
+    margin-bottom: 12px;
+  }
+
+  .candy-flavor {
+    font-size: 0.7rem;
+    letter-spacing: 0.2em;
+    color: var(--candy3);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+
+  .candy-desc {
+    font-size: 0.8rem;
+    line-height: 1.85;
+    color: var(--dim);
+    max-width: 480px;
+    margin-bottom: 28px;
+  }
+  .candy-desc strong { color: var(--text); }
+
+  .candy-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: transparent;
+    border: 1px solid var(--candy1);
+    color: var(--candy1);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    padding: 12px 24px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.25s;
+    cursor: pointer;
+  }
+  .candy-btn:hover {
+    background: var(--candy1);
+    color: #000;
+    box-shadow: 0 0 30px rgba(255,60,172,0.4);
+  }
+  .candy-btn .arrow {
+    transition: transform 0.2s;
+  }
+  .candy-btn:hover .arrow { transform: translateX(4px); }
+
+  .candy-visual {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 120px;
+    height: 120px;
+    flex-shrink: 0;
+  }
+
+  /* Universe orb for candy card */
+  .universe-orb {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #7ecfff, #0033aa, #00000f);
+    box-shadow: 0 0 40px rgba(50,100,255,0.4), 0 0 80px rgba(0,255,231,0.15);
+    position: relative;
+    animation: slowSpin 20s linear infinite;
+  }
+  .universe-orb::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 1px solid rgba(0,255,231,0.15);
+    animation: slowSpin 10s linear infinite reverse;
+  }
+  .universe-orb::before {
+    content: '';
+    position: absolute;
+    inset: -16px;
+    border-radius: 50%;
+    border: 1px dashed rgba(0,255,231,0.07);
+  }
+
+  @keyframes slowSpin {
+    from { transform: rotate(0deg); }
+    to   { transform: rotate(360deg); }
+  }
+
+  /* ── COMING SOON CARDS ── */
+  .coming-soon-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .coming-card {
+    border: 1px dashed rgba(255,255,255,0.08);
+    padding: 28px 24px;
+    position: relative;
+    opacity: 0.6;
+    transition: opacity 0.3s;
+  }
+  .coming-card:hover { opacity: 0.9; }
+
+  .coming-badge {
+    display: inline-block;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    padding: 3px 8px;
+    border: 1px solid;
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .coming-badge.lab    { border-color: rgba(0,255,231,0.3); color: var(--candy2); }
+  .coming-badge.mixing { border-color: rgba(255,230,0,0.3); color: var(--candy3); }
+  .coming-badge.idea   { border-color: rgba(255,107,53,0.3); color: var(--candy4); }
+
+  .coming-title {
+    font-family: 'Abril Fatface', serif;
+    font-size: 1.15rem;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+  .coming-desc {
+    font-size: 0.72rem;
+    line-height: 1.7;
+    color: var(--dim);
+  }
+
+  /* ── ABOUT ANDIE ── */
+  .about-section {
+    padding: 0 0 80px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+
+  .andie-avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 40% 35%, #ff99dd, #8b0050);
+    box-shadow: 0 0 40px rgba(255,60,172,0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.5rem;
+    flex-shrink: 0;
+    position: relative;
+    border: 2px solid rgba(255,60,172,0.3);
+  }
+  .andie-avatar::after {
+    content: '⚗️';
+    position: absolute;
+    bottom: -4px;
+    right: -4px;
+    font-size: 1.4rem;
+    background: var(--bg);
+    border-radius: 50%;
+    padding: 2px;
+  }
+
+  .about-text h3 {
+    font-family: 'Abril Fatface', serif;
+    font-size: 1.8rem;
+    color: var(--candy1);
+    margin-bottom: 4px;
+  }
+  .about-text .title {
+    font-size: 0.65rem;
+    letter-spacing: 0.3em;
+    color: var(--candy3);
+    text-transform: uppercase;
+    margin-bottom: 16px;
+  }
+  .about-text p {
+    font-size: 0.8rem;
+    line-height: 1.9;
+    color: var(--dim);
+    margin-bottom: 12px;
+  }
+  .about-text p strong { color: var(--text); }
+
+  /* ── COFFEE ── */
+  .coffee-section {
+    text-align: center;
+    padding: 60px 0 100px;
+    border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .coffee-section p {
+    font-size: 0.78rem;
+    color: var(--dim);
+    line-height: 1.8;
+    max-width: 420px;
+    margin: 0 auto 32px;
+  }
+  .coffee-section p strong { color: var(--text); }
+  .coffee-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    border: 1px solid rgba(255,107,53,0.5);
+    color: var(--candy4);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    padding: 14px 30px;
+    text-decoration: none;
+    text-transform: uppercase;
+    transition: all 0.3s;
+  }
+  .coffee-btn:hover {
+    background: var(--candy4);
+    color: #000;
+    box-shadow: 0 0 40px rgba(255,107,53,0.3);
+  }
+
+  /* ── FOOTER ── */
+  footer {
+    text-align: center;
+    padding: 24px;
+    font-size: 0.65rem;
+    color: var(--dim);
+    letter-spacing: 0.2em;
+    border-top: 1px solid rgba(255,255,255,0.04);
+  }
+  footer span { color: var(--candy1); }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes bounce {
+    0%, 100% { transform: rotate(45deg) translateY(0); }
+    50%       { transform: rotate(45deg) translateY(6px); }
+  }
+
+  .reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 600px) {
+    .candy-card { grid-template-columns: 1fr; }
+    .candy-visual { display: none; }
+    .about-section { grid-template-columns: 1fr; }
+    .andie-avatar { width: 80px; height: 80px; font-size: 2.5rem; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="bg-glow"></div>
+<div id="particles"></div>
+
+<!-- ══ HERO ══ -->
+<section class="hero">
+  <div class="flask-icon">🧪</div>
+  <div class="hero-eyebrow">Welcome to the lab</div>
+  <h1 class="hero-title">
+    <span class="freak">freak</span><span class="andie">andie</span><span class="dot-com">.com</span>
+  </h1>
+  <div class="hero-subtitle">Free Candy for Your Brain.</div>
+  <p class="hero-bio">
+    <strong>Andie</strong> is a self-described mad scientist with a problem: she keeps building weird, wonderful things and has nowhere to put them. So she started handing them out. <strong>No cost. No catch. Just free candy.</strong> Each project is a little experiment — something interactive, educational, or just plain delightful. Take one. Take all of them. The lab never closes.
+  </p>
+  <div class="hero-tags">
+    <span class="tag tag-pink">Interactive Tools</span>
+    <span class="tag tag-cyan">Science & Space</span>
+    <span class="tag tag-yellow">Always Free</span>
+    <span class="tag tag-orange">New Candies Coming</span>
+  </div>
+  <div class="scroll-hint">
+    <span>See the candy</span>
+    <div class="scroll-arrow"></div>
+  </div>
+</section>
+
+<div class="wrapper">
+
+  <!-- ══ CANDY SECTION ══ -->
+  <div class="section-divider"><span>🍬 The Candy Jar</span></div>
+
+  <section class="candy-section">
+    <div class="candy-section-title">Available Now</div>
+    <div class="candy-section-sub">Fresh from the lab. Grab one.</div>
+
+    <!-- CANDY 001 -->
+    <div class="candy-card reveal">
+      <div class="bg-num">001</div>
+      <div>
+        <div class="candy-num">🍬 Candy #001</div>
+        <div class="candy-name">Scale of the Universe</div>
+        <div class="candy-flavor">Flavor: Mind-Expanding · Cosmic · Infinite</div>
+        <div class="candy-desc">
+          Scroll from the <strong>smallest thing that exists</strong> — the Planck length — all the way to the <strong>edge of the observable universe</strong>. 11 stops. 46 orders of magnitude. Mind-blowing facts at every scale. Ambient sound that evolves as you travel through size. <strong>Warning: may cause existential wonder.</strong>
+        </div>
+        <a href="scale-of-universe.html" class="candy-btn">
+          Unwrap this candy <span class="arrow">→</span>
+        </a>
+      </div>
+      <div class="candy-visual">
+        <div class="universe-orb"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ══ COMING SOON ══ -->
+  <div class="section-divider"><span>🔬 In the Lab</span></div>
+
+  <section class="candy-section">
+    <div class="candy-section-title">Coming Soon</div>
+    <div class="candy-section-sub">Andie is mixing something. Stand back.</div>
+
+    <div class="coming-soon-grid reveal">
+
+      <div class="coming-card">
+        <div class="coming-badge mixing">Mixing</div>
+        <div class="coming-title">If the Big Bang Was Today</div>
+        <div class="coming-desc">Compress 13.8 billion years into a single calendar year. See what happened — and when.</div>
+      </div>
+
+      <div class="coming-card">
+        <div class="coming-badge lab">In the Lab</div>
+        <div class="coming-title">How Far is That Star?</div>
+        <div class="coming-desc">Type in a star's name. Visualize exactly how long its light took to reach your eyes right now.</div>
+      </div>
+
+      <div class="coming-card">
+        <div class="coming-badge idea">Idea</div>
+        <div class="coming-title">Sound of the Solar System</div>
+        <div class="coming-desc">Each planet converted to its actual orbital frequency. Listen to the music of our solar system.</div>
+      </div>
+
+      <div class="coming-card">
+        <div class="coming-badge idea">Idea</div>
+        <div class="coming-title">You Are Here</div>
+        <div class="coming-desc">A real-time map of where Earth sits in the Milky Way, updated to reflect our actual galactic position.</div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ══ ABOUT ANDIE ══ -->
+  <div class="section-divider"><span>👩‍🔬 About Andie</span></div>
+
+  <section class="about-section reveal">
+    <div class="andie-avatar">👩‍🔬</div>
+    <div class="about-text">
+      <h3>Hi, I'm Andie.</h3>
+      <div class="title">Mad Scientist · Candy Distributor · Purveyor of Weird</div>
+      <p>I build interactive things that make people go <strong>"whoa."</strong> Science, space, data, sound — anything that turns dry information into something you can feel. Then I give it away for free, because the best candy is shared candy.</p>
+      <p>I started this lab because I got tired of the internet asking me to sign up, subscribe, or pay before I could experience something cool. <strong>Freakandie.com is my answer to that.</strong> Everything here is free, forever. No account. No ads. No nonsense.</p>
+      <p>If something I made genuinely delighted you, a coffee keeps the lab running. But truly — no pressure. Just enjoy the candy.</p>
+    </div>
+  </section>
+
+  <!-- ══ COFFEE ══ -->
+  <section class="coffee-section reveal">
+    <p>The lab runs on curiosity and <strong>coffee</strong>. Everything here is free and always will be. But if one of Andie's candies made your day a little more interesting, a small donation keeps the experiments going.</p>
+    <a href="https://buymeacoffee.com/freakandie" target="_blank" class="coffee-btn">
+      ☕ Buy Andie a coffee
+    </a>
+  </section>
+
+</div>
+
+<!-- ══ FOOTER ══ -->
+<footer>
+  <span>freakandie.com</span> — free candy for your brain. made with 🧪 by andie.
+</footer>
+
+<script>
+// FLOATING PARTICLES
+(function() {
+  const container = document.getElementById('particles');
+  const colors = ['#ff3cac','#00ffe7','#ffe600','#ff6b35','#cc88ff'];
+  const symbols = ['✦','·','◆','○','✧','◇','•'];
+  for (let i = 0; i < 35; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    const size = Math.random() * 6 + 2;
+    const color = colors[Math.floor(Math.random() * colors.length)];
+    const sym = symbols[Math.floor(Math.random() * symbols.length)];
+    const useSymbol = Math.random() > 0.5;
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      width: ${useSymbol ? 'auto' : size + 'px'};
+      height: ${useSymbol ? 'auto' : size + 'px'};
+      background: ${useSymbol ? 'transparent' : color};
+      color: ${color};
+      font-size: ${Math.random() * 10 + 8}px;
+      animation-duration: ${Math.random() * 20 + 15}s;
+      animation-delay: ${Math.random() * 15}s;
+      border-radius: 50%;
+    `;
+    if (useSymbol) p.textContent = sym;
+    container.appendChild(p);
+  }
+})();
+
+// SCROLL REVEAL
+const revealEls = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.15 });
+revealEls.forEach(el => revealObserver.observe(el));
+</script>
+</body>
+</html>
