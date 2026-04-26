@@ -1,0 +1,895 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Myth Machine — freakandie.com</title>
+<meta name="description" content="Explore gods, monsters, and legends from Greek, Norse, Egyptian and Japanese mythology. Dramatic stories and fascinating facts — free forever.">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0608;
+    --surface: #120d10;
+    --surface2: #1a1118;
+    --gold: #d4a843;
+    --gold2: #f0c86a;
+    --ember: #c84b2f;
+    --ember2: #ff7a52;
+    --parchment: #e8d9b8;
+    --parchment2: #c8b898;
+    --jade: #3aaa7a;
+    --ice: #88ccee;
+    --text: #d8c8b0;
+    --dim: #6a5848;
+    --border: rgba(212,168,67,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Crimson Pro', serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+    pointer-events: none; opacity: 0.6;
+  }
+
+  .bg-ambience {
+    position: fixed; inset: 0; z-index: 0; pointer-events: none;
+    background:
+      radial-gradient(ellipse 70% 50% at 15% 80%, rgba(200,75,47,0.07) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 40% at 85% 20%, rgba(212,168,67,0.05) 0%, transparent 60%);
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 14px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(10,6,8,0.95);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(8px);
+  }
+  .header-left { display: flex; flex-direction: column; gap: 1px; }
+  .header-candy { font-size: 0.65rem; letter-spacing: 0.4em; color: var(--gold); text-transform: uppercase; }
+  .header-title { font-family: 'Cinzel Decorative', serif; font-size: 0.95rem; color: var(--parchment); }
+  .header-right { display: flex; gap: 10px; align-items: center; }
+  .nav-btn {
+    font-size: 0.7rem; letter-spacing: 0.2em; color: var(--dim);
+    text-decoration: none; text-transform: uppercase;
+    border: 1px solid rgba(212,168,67,0.15); padding: 6px 12px; transition: all 0.2s;
+  }
+  .nav-btn:hover { color: var(--gold); border-color: rgba(212,168,67,0.4); }
+  .coffee-btn {
+    font-size: 0.7rem; letter-spacing: 0.2em; color: var(--ember2);
+    text-decoration: none; text-transform: uppercase;
+    border: 1px solid rgba(200,75,47,0.35); padding: 6px 12px; transition: all 0.2s;
+  }
+  .coffee-btn:hover { background: var(--ember); color: #fff; }
+
+  /* ── MAIN ── */
+  main { position: relative; z-index: 10; max-width: 1000px; margin: 0 auto; padding: 110px 24px 80px; }
+
+  /* ── HERO ── */
+  .hero { text-align: center; margin-bottom: 48px; }
+  .hero-icon {
+    font-size: 3rem; margin-bottom: 16px; display: block;
+    animation: flicker 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 16px rgba(212,168,67,0.5));
+  }
+  @keyframes flicker {
+    0%,100% { opacity: 1; transform: scale(1) rotate(-2deg); }
+    25% { opacity: 0.9; transform: scale(1.05) rotate(2deg); }
+    50% { opacity: 1; transform: scale(0.98) rotate(-1deg); }
+  }
+  .hero-eyebrow { font-size: 0.65rem; letter-spacing: 0.5em; color: var(--gold); text-transform: uppercase; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.8s 0.2s forwards; }
+  .hero-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(2.2rem, 7vw, 4.5rem); font-weight: 900; line-height: 1.05;
+    color: var(--parchment); text-shadow: 0 0 60px rgba(212,168,67,0.2);
+    margin-bottom: 16px; opacity: 0; animation: fadeUp 0.8s 0.4s forwards;
+  }
+  .hero-title span { color: var(--gold); }
+  .hero-sub {
+    font-size: 1.05rem; font-style: italic; color: var(--parchment2);
+    line-height: 1.7; max-width: 500px; margin: 0 auto;
+    opacity: 0; animation: fadeUp 0.8s 0.6s forwards;
+  }
+
+  /* ── MYTHOLOGY TABS ── */
+  .myth-tabs {
+    display: flex; gap: 0; margin-bottom: 32px;
+    border: 1px solid var(--border); overflow: hidden;
+    opacity: 0; animation: fadeUp 0.8s 0.8s forwards;
+  }
+  .myth-tab {
+    flex: 1; padding: 14px 8px; text-align: center;
+    background: transparent; border: none; cursor: pointer;
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    color: var(--dim); transition: all 0.2s;
+    border-right: 1px solid var(--border);
+  }
+  .myth-tab:last-child { border-right: none; }
+  .myth-tab:hover { color: var(--parchment); background: rgba(255,255,255,0.02); }
+  .myth-tab.active { color: var(--bg); font-weight: 600; }
+  .myth-tab[data-myth="Greek"].active  { background: var(--ice); }
+  .myth-tab[data-myth="Norse"].active  { background: var(--gold); }
+  .myth-tab[data-myth="Egyptian"].active { background: var(--gold2); }
+  .myth-tab[data-myth="Japanese"].active { background: var(--ember2); }
+  .myth-tab[data-myth="All"].active { background: var(--parchment); }
+
+  /* ── ENTRY GRID ── */
+  .entry-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 12px; margin-bottom: 40px;
+  }
+  .entry-btn {
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 18px 16px; cursor: pointer; text-align: left;
+    transition: all 0.2s; position: relative; overflow: hidden;
+  }
+  .entry-btn::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+    opacity: 0; transition: opacity 0.2s;
+  }
+  .entry-btn:hover { border-color: rgba(212,168,67,0.3); transform: translateY(-2px); }
+  .entry-btn:hover::before { opacity: 1; }
+  .entry-btn.active { border-color: rgba(212,168,67,0.5); background: var(--surface2); }
+  .entry-btn.active::before { opacity: 1; }
+
+  .entry-btn[data-myth="Greek"]::before    { background: var(--ice); }
+  .entry-btn[data-myth="Norse"]::before    { background: var(--gold); }
+  .entry-btn[data-myth="Egyptian"]::before { background: var(--gold2); }
+  .entry-btn[data-myth="Japanese"]::before { background: var(--ember2); }
+
+  .entry-symbol { font-size: 1.6rem; margin-bottom: 8px; display: block; }
+  .entry-myth-tag {
+    font-size: 0.55rem; letter-spacing: 0.3em; text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .tag-greek    { color: var(--ice); }
+  .tag-norse    { color: var(--gold); }
+  .tag-egyptian { color: var(--gold2); }
+  .tag-japanese { color: var(--ember2); }
+
+  .entry-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.8rem; color: var(--parchment); line-height: 1.2; margin-bottom: 4px;
+  }
+  .entry-epithet { font-size: 0.7rem; color: var(--dim); font-style: italic; line-height: 1.3; }
+
+  /* ── MYTH CARD ── */
+  #myth-display { margin-top: 8px; }
+
+  .myth-card {
+    background: var(--surface); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    animation: revealCard 0.5s ease forwards;
+  }
+  @keyframes revealCard {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .myth-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  }
+  .myth-card[data-myth="Greek"]::before    { background: linear-gradient(to right, var(--ice), var(--jade)); }
+  .myth-card[data-myth="Norse"]::before    { background: linear-gradient(to right, var(--gold), var(--ember)); }
+  .myth-card[data-myth="Egyptian"]::before { background: linear-gradient(to right, var(--gold2), var(--gold)); }
+  .myth-card[data-myth="Japanese"]::before { background: linear-gradient(to right, var(--ember2), var(--ember)); }
+
+  .card-header {
+    padding: 32px 40px 24px;
+    border-bottom: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: flex-start; gap: 20px;
+  }
+  .myth-origin { font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase; margin-bottom: 8px; }
+  .origin-greek    { color: var(--ice); }
+  .origin-norse    { color: var(--gold); }
+  .origin-egyptian { color: var(--gold2); }
+  .origin-japanese { color: var(--ember2); }
+
+  .myth-title { font-family: 'Cinzel Decorative', serif; font-size: clamp(1.6rem, 4vw, 2.6rem); color: var(--parchment); line-height: 1.1; margin-bottom: 6px; }
+  .myth-epithet { font-size: 1rem; font-style: italic; color: var(--gold2); }
+  .myth-symbol { font-size: 3rem; flex-shrink: 0; filter: drop-shadow(0 0 12px rgba(212,168,67,0.4)); }
+
+  .story-section { padding: 36px 40px; border-bottom: 1px solid var(--border); }
+  .section-label {
+    font-size: 0.6rem; letter-spacing: 0.4em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 20px; display: flex; align-items: center; gap: 12px;
+  }
+  .section-label::after { content: ''; flex: 1; height: 1px; background: linear-gradient(to right, rgba(212,168,67,0.3), transparent); }
+
+  .story-text { font-size: 1.1rem; line-height: 1.95; color: var(--text); font-weight: 300; }
+  .story-text p { margin-bottom: 16px; }
+  .story-text p:last-child { margin-bottom: 0; }
+  .story-text em { color: var(--gold2); font-style: italic; }
+  .story-text strong { color: var(--parchment); font-weight: 600; }
+  .story-text p:first-child::first-letter {
+    font-family: 'Cinzel Decorative', serif; font-size: 3.8rem; font-weight: 900;
+    float: left; line-height: 0.8; margin: 8px 12px 0 0;
+    color: var(--gold); text-shadow: 0 0 30px rgba(212,168,67,0.4);
+  }
+
+  .facts-section { padding: 36px 40px; background: var(--surface2); }
+  .facts-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+  .fact-item { border-left: 2px solid var(--gold); padding-left: 16px; }
+  .fact-label { font-size: 0.58rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold); margin-bottom: 6px; }
+  .fact-value { font-size: 0.92rem; color: var(--text); line-height: 1.5; }
+
+  .dyk-section { padding: 24px 40px; border-top: 1px solid var(--border); background: rgba(212,168,67,0.03); }
+  .dyk-inner { display: flex; gap: 16px; align-items: flex-start; }
+  .dyk-icon { font-size: 1.4rem; flex-shrink: 0; margin-top: 2px; }
+  .dyk-text { font-size: 0.9rem; line-height: 1.75; color: var(--parchment2); font-style: italic; }
+  .dyk-text strong { color: var(--gold2); font-style: normal; }
+
+  .card-footer {
+    padding: 20px 40px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+  }
+  .footer-note { font-size: 0.7rem; color: var(--dim); font-style: italic; }
+
+  /* ── EMPTY STATE ── */
+  .empty-state {
+    text-align: center; padding: 60px 32px;
+    border: 1px dashed rgba(212,168,67,0.1); background: var(--surface);
+  }
+  .empty-icon { font-size: 2.5rem; margin-bottom: 16px; display: block; opacity: 0.5; }
+  .empty-title { font-family: 'Cinzel Decorative', serif; font-size: 1.1rem; color: var(--parchment2); margin-bottom: 10px; }
+  .empty-sub { font-size: 0.85rem; color: var(--dim); font-style: italic; }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    margin-top: 60px; padding-top: 40px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+  }
+  .bottom-nav a {
+    font-size: 0.75rem; letter-spacing: 0.2em; text-transform: uppercase;
+    text-decoration: none; padding: 10px 20px; border: 1px solid; transition: all 0.2s;
+  }
+  .btn-back { border-color: var(--border); color: var(--dim); }
+  .btn-back:hover { color: var(--gold); border-color: rgba(212,168,67,0.3); }
+  .btn-coffee { border-color: rgba(200,75,47,0.35); color: var(--ember2); }
+  .btn-coffee:hover { background: var(--ember); color: #fff; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+  @media (max-width: 600px) {
+    .card-header { flex-direction: column; padding: 24px; }
+    .story-section, .facts-section, .dyk-section, .card-footer { padding: 24px; }
+    .myth-symbol { display: none; }
+    header { padding: 12px 16px; }
+    .header-right .nav-btn { display: none; }
+    .myth-tab .tab-emoji { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-ambience"></div>
+
+<header>
+  <div class="header-left">
+    <div class="header-candy">🍬 freakandie.com — Candy #003</div>
+    <div class="header-title">The Myth Machine</div>
+  </div>
+  <div class="header-right">
+    <a href="index.html" class="nav-btn">← Lab</a>
+    <a href="https://buymeacoffee.com/freakandie" target="_blank" class="coffee-btn">☕ Coffee</a>
+  </div>
+</header>
+
+<main>
+
+  <div class="hero">
+    <span class="hero-icon">🔱</span>
+    <div class="hero-eyebrow">🍬 Candy #003 — Ancient Worlds</div>
+    <h1 class="hero-title">The Myth <span>Machine</span></h1>
+    <p class="hero-sub">Choose a god, monster, or legend. Get their dramatic story and the facts behind the myth.</p>
+  </div>
+
+  <!-- TABS -->
+  <div class="myth-tabs">
+    <button class="myth-tab active" data-myth="All" onclick="filterMyths('All')"><span class="tab-emoji">🌍 </span>All</button>
+    <button class="myth-tab" data-myth="Greek" onclick="filterMyths('Greek')"><span class="tab-emoji">⚡ </span>Greek</button>
+    <button class="myth-tab" data-myth="Norse" onclick="filterMyths('Norse')"><span class="tab-emoji">⚔️ </span>Norse</button>
+    <button class="myth-tab" data-myth="Egyptian" onclick="filterMyths('Egyptian')"><span class="tab-emoji">𓂀 </span>Egyptian</button>
+    <button class="myth-tab" data-myth="Japanese" onclick="filterMyths('Japanese')"><span class="tab-emoji">⛩ </span>Japanese</button>
+  </div>
+
+  <!-- ENTRY GRID -->
+  <div class="entry-grid" id="entry-grid"></div>
+
+  <!-- MYTH DISPLAY -->
+  <div id="myth-display">
+    <div class="empty-state">
+      <span class="empty-icon">📜</span>
+      <div class="empty-title">The scroll awaits your choice.</div>
+      <div class="empty-sub">Select a legend above and the Machine shall speak.</div>
+    </div>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="index.html" class="btn-back">← Back to the lab</a>
+    <a href="https://buymeacoffee.com/freakandie" target="_blank" class="btn-coffee">☕ Buy Andie a coffee</a>
+  </div>
+
+</main>
+
+<script>
+const MYTHS = [
+  // ── GREEK (8) ──
+  {
+    id: "medusa", myth: "Greek", symbol: "🐍", name: "Medusa",
+    epithet: "The Gorgon Whose Gaze Turns Men to Stone",
+    story: `<p>Before the curse, <em>Medusa</em> was mortal — and breathtakingly beautiful. A priestess of <em>Athena</em>, she devoted herself to the goddess with unwavering faith. But beauty, even in sacred halls, draws dangerous eyes. When <strong>Poseidon violated her in Athena's own temple</strong>, the goddess did not mourn for Medusa. She raged — and punished the victim. Medusa's lustrous hair became a writhing mass of serpents. Her lovely eyes became weapons, turning any soul who met her gaze to cold, grey stone.</p>
+<p>Exiled to the edges of the world, <em>Medusa</em> lived among the remains of those who had come to slay her — a garden of petrified warriors, frozen in their final moment of terror. When the hero <em>Perseus</em> arrived, he came cleverly: guided by the reflective surface of his polished shield, he navigated by her reflection alone. <strong>With one swift stroke, he severed her head.</strong> Even in death she was powerful — from her severed neck sprang the winged horse <em>Pegasus</em> and the giant <em>Chrysaor</em>, fathered by Poseidon long before.</p>
+<p>Perseus carried her head as a weapon, using it to shatter enemies until finally gifting it to Athena, who mounted it on her aegis — her divine shield. <strong>The very curse became a tool of the goddess who cursed her.</strong> Medusa's story is older than mercy, a reminder that even in a world of gods, justice is rarely just.</p>`,
+    facts: {
+      "Domain": "Death by petrification; once a priestess of wisdom and chastity",
+      "Key Symbols": "Serpent hair, stone gaze, severed head (used as a weapon)",
+      "Family": "Daughter of sea-gods Phorcys and Ceto; sister to immortal Gorgons Stheno and Euryale",
+      "Famous For": "Being slain by Perseus, whose reflective shield allowed him to avoid her deadly gaze",
+      "Legacy": "Her face — the Gorgoneion — was painted on shields, armor, and buildings across the ancient world to ward off evil"
+    },
+    dyk: "Medusa is the only one of the three Gorgon sisters who was mortal. Her immortal sisters Stheno and Euryale are said to still roam the edges of the world, grieving."
+  },
+  {
+    id: "prometheus", myth: "Greek", symbol: "🔥", name: "Prometheus",
+    epithet: "The Titan Who Stole Fire for Humanity",
+    story: `<p><em>Prometheus</em> — whose name means "forethought" — was a Titan who loved humanity more than he loved the comfort of the gods. When <em>Zeus</em> withheld fire from mortals, keeping them cold and vulnerable in the dark, <strong>Prometheus could not bear it</strong>. He climbed to Olympus, concealed an ember in a hollow fennel stalk, and brought the sacred flame down to the shivering world below. With fire came warmth, cooked food, metalwork, and civilization itself.</p>
+<p><em>Zeus</em> was not forgiving. He ordered Prometheus bound to a crag in the <em>Caucasus Mountains</em> with unbreakable chains of adamantine. Each morning, <strong>an eagle — Zeus's own bird — descended and tore open his abdomen, feasting on his liver.</strong> Each night, because he was immortal, the liver regrew. The cycle continued for thirty years — or, in some accounts, thirty thousand.</p>
+<p>It was <em>Heracles</em> who finally freed him, shooting the eagle mid-descent and breaking the chains. <strong>Prometheus never apologized.</strong> He had foreseen his punishment and chosen it willingly. The gift of fire — and all that it kindled in the human spirit — was worth every morning on that rock.</p>`,
+    facts: {
+      "Domain": "Forethought, fire, craft, civilization, protector of humanity",
+      "Key Symbols": "Torch, fennel stalk, chains, eagle",
+      "Family": "Son of the Titan Iapetus and the Oceanid Clymene; brother of Epimetheus and Atlas",
+      "Famous For": "Stealing fire from the gods and giving it to humanity; enduring eternal punishment as a result",
+      "Legacy": "His name is the root of 'Promethean' — used to describe bold, creative defiance of limits. Mary Shelley subtitled Frankenstein 'The Modern Prometheus.'"
+    },
+    dyk: "Prometheus also warned Zeus about a prophecy: that a son born of the sea-goddess Thetis would overthrow his father. Zeus, heeding this, arranged for Thetis to marry a mortal — their son was Achilles."
+  },
+  {
+    id: "orpheus", myth: "Greek", symbol: "🎶", name: "Orpheus",
+    epithet: "The Musician Who Almost Conquered Death",
+    story: `<p>There has never been music like <em>Orpheus</em> made. When he played his lyre, rivers paused in their courses, stones wept, and savage beasts lay down like lambs. He was the son of the Muse <em>Calliope</em> and could move the very world with sound. His love, <em>Eurydice</em>, was everything — and when she died on their wedding day, struck by a viper's bite, <strong>Orpheus did what no living man had ever done: he descended into the Underworld to bring her back.</strong></p>
+<p>His music silenced <em>Cerberus</em>, softened the <em>Furies</em>, and — most impossibly — made <em>Hades</em> himself weep. The lord of the dead granted Eurydice's return on a single condition: <strong>Orpheus must walk ahead of her to the surface and not look back until both had reached the living world.</strong> He walked. He climbed. He could hear nothing behind him. Doubt crept in like shadow. Was she there? Had Hades deceived him? Just steps from the exit, he turned.</p>
+<p>Eurydice dissolved back into mist before his eyes, reaching toward him as she faded. He had failed her by a breath. <strong>He spent his remaining years wandering, playing music so sorrowful it broke all hearts.</strong> When the Maenads tore him apart in a frenzy, his severed head continued singing as it floated down the river — still calling her name.</p>`,
+    facts: {
+      "Domain": "Music, poetry, the power of art over death and nature",
+      "Key Symbols": "Lyre, laurel, descending path to the Underworld",
+      "Family": "Son of the Muse Calliope and either Apollo or the Thracian king Oeagrus",
+      "Famous For": "Descending to Hades to retrieve his dead wife Eurydice — and losing her again at the final moment",
+      "Legacy": "His myth inspired countless operas, including Monteverdi's L'Orfeo (1607), one of the earliest surviving operas"
+    },
+    dyk: "The Oracle at Delphi was said to have been established at the spot where Orpheus's severed head came to rest, still singing prophecies."
+  },
+  {
+    id: "athena", myth: "Greek", symbol: "🦉", name: "Athena",
+    epithet: "Goddess of Wisdom, War, and Craft",
+    story: `<p><em>Athena</em> entered the world in the most dramatic fashion possible. <em>Zeus</em>, having swallowed the Titaness <em>Metis</em> whole to prevent a prophecy of being overthrown, suffered such tremendous headaches that he could bear it no longer. <em>Hephaestus</em> was summoned to split his skull with an axe — and from the wound, <strong><em>Athena</em> sprang fully formed, armored in gleaming bronze, already shouting her war cry.</strong> She was born ready.</p>
+<p>She was the goddess cities prayed to — not for the savage chaos of <em>Ares's</em> warfare, but for strategy, discipline, and the wisdom to know when not to fight. When she and <em>Poseidon</em> competed for the patronage of Greece's greatest city, <strong>Poseidon struck his trident and produced a saltwater spring; Athena struck her spear and grew an olive tree.</strong> The people chose her gift — sustenance over spectacle. The city became Athens.</p>
+<p>She was protector of heroes, teacher of craft, and patron of justice. <em>Odysseus</em> was her favorite — not the strongest or most beautiful hero, but the cleverest. <strong>She admired minds that worked like her own.</strong> In her temple the owl watched silently, seeing everything in the dark — the perfect symbol for a goddess who saw through every deception.</p>`,
+    facts: {
+      "Domain": "Wisdom, strategic warfare, crafts, justice, civilization",
+      "Key Symbols": "Owl, olive tree, aegis (shield), spear and helmet",
+      "Family": "Daughter of Zeus and the Titaness Metis; no mother in the traditional sense — born from Zeus's head",
+      "Famous For": "Winning Athens's patronage with the gift of the olive tree; guiding Odysseus throughout the Odyssey",
+      "Legacy": "Her Roman counterpart Minerva. The owl of Athena became a symbol of knowledge — still used by universities worldwide"
+    },
+    dyk: "Athena was one of three Olympian 'virgin goddesses' — she swore never to marry. When the smith god Hephaestus once tried to assault her, she deflected him; his seed fell to earth and produced Erichthonius, whom Athena raised as her own son."
+  },
+  {
+    id: "persephone", myth: "Greek", symbol: "🌸", name: "Persephone",
+    epithet: "Queen of the Underworld, Daughter of Spring",
+    story: `<p>She was picking flowers in a sunlit meadow — narcissus, crocus, violet — when <strong>the earth cracked open and <em>Hades</em> rose in his black chariot</strong>. He had watched her from below, had loved her from a distance, and had decided. In moments she was gone, pulled beneath the surface, the flowers still in her hands. Above ground, her mother <em>Demeter</em>, goddess of the harvest, went mad with grief. She abandoned her duties. The earth withered. Crops failed. Famine spread across the mortal world.</p>
+<p>The gods intervened eventually — <em>Zeus</em> could not let humanity starve. A deal was struck: <em>Persephone</em> would return to her mother. But she had eaten six pomegranate seeds in the Underworld — <strong>and anyone who eats in the realm of the dead is bound to it.</strong> She would spend six months below and six above. Half the year she reigns as Queen beside Hades; half the year she returns to her mother.</p>
+<p>And so <em>Demeter</em> grieves every autumn when her daughter descends — leaves fall, frost comes, fields lie bare. <strong>Every spring, when Persephone climbs back into the light, the world blooms in celebration.</strong> What began as an abduction became something stranger and more complex — a queen who rules two worlds, belonging fully to neither.</p>`,
+    facts: {
+      "Domain": "Spring growth, death, the Underworld, grain and vegetation",
+      "Key Symbols": "Pomegranate, torch, sheaves of wheat, narcissus flower",
+      "Family": "Daughter of Zeus and Demeter; wife of Hades and Queen of the Underworld",
+      "Famous For": "Her abduction by Hades and the resulting creation of the seasons",
+      "Legacy": "The Eleusinian Mysteries — ancient Greece's most sacred religious rites — were centered on Demeter and Persephone's reunion"
+    },
+    dyk: "In the Underworld, Persephone was not powerless. She interceded for souls, made rulings alongside Hades, and was feared in her own right. Mortals often found it safer to invoke her than Hades himself."
+  },
+  {
+    id: "icarus", myth: "Greek", symbol: "☀️", name: "Icarus",
+    epithet: "The Boy Who Flew Too Close to the Sun",
+    story: `<p><em>Daedalus</em> was the greatest craftsman who ever lived, and his greatest invention was also his undoing. Imprisoned on the island of Crete by King <em>Minos</em> — who feared the knowledge in his hands — Daedalus devised an escape no cage could prevent. <strong>He built wings from feathers and wax, enough for two: himself, and his young son <em>Icarus</em>.</strong> Before they leapt from the cliff, Daedalus gave one warning: fly the middle path. Too low and the sea's spray would dampen the wings. Too high and the sun would melt the wax.</p>
+<p><em>Icarus</em> listened. At first. The sensation of flight was like nothing language can hold — the wind, the vast blue openness, the shrinking of all earthly things below. <strong>He felt immortal. He forgot.</strong> He climbed higher, chasing the sun, arms wide, laughing. Daedalus watched in horror as the feathers began to fall — one by one, then in cascades. The wax ran in golden streams.</p>
+<p>Icarus fell into the sea below. <strong>Daedalus circled the water calling his name, but there was nothing left to find.</strong> He flew on alone to Sicily, and is said to have never built anything again. The sea where Icarus fell is called the Icarian Sea to this day — named for a boy who, for one brief moment, flew higher than any man before him.</p>`,
+    facts: {
+      "Domain": "Hubris, ambition, the dangers of ignoring wisdom",
+      "Key Symbols": "Wax wings, feathers, the sun, the sea",
+      "Family": "Son of the master craftsman Daedalus; no mother named in most accounts",
+      "Famous For": "Flying too close to the sun, melting his wax wings, and falling into the sea",
+      "Legacy": "His story is the defining myth of overreach — 'flying too close to the sun' remains one of the most used metaphors in the English language"
+    },
+    dyk: "The poet Ovid notes in his retelling that a fisherman, a shepherd, and a farmer witnessed the fall of Icarus — but assumed the flying figures were gods and continued their work, unbothered. Pieter Bruegel painted this indifference in his famous 'Landscape with the Fall of Icarus.'"
+  },
+  {
+    id: "hermes", myth: "Greek", symbol: "⚡", name: "Hermes",
+    epithet: "Messenger of the Gods, Guide of Souls",
+    story: `<p><em>Hermes</em> arrived in the world already scheming. Born at dawn, <strong>by noon he had invented the lyre; by evening he had stolen fifty cattle from his brother <em>Apollo</em></strong> and hidden them so cleverly that even the god of prophecy couldn't find them. When confronted, infant Hermes lay in his cradle with wide innocent eyes and denied everything. Apollo dragged him to Zeus — who laughed. He could tell his son was lying and loved him for it. The lyre was traded as peace offering. Apollo was besotted with the instrument. They became the closest of friends.</p>
+<p>From that first day, <em>Hermes</em> was the god of every threshold and transition. He moved between worlds that others could not cross — <strong>mortal and divine, living and dead, sleeping and waking</strong>. His caduceus — two serpents twined around a winged staff — opened any door. He was the only Olympian who traveled freely to the Underworld and back, escorting the souls of the dead to their final resting place.</p>
+<p>He was patron of travelers, merchants, thieves, liars, and athletes — all those who live by speed and cleverness. <strong>He delighted in clever reversals and blessed those who could think on their feet.</strong> Where Apollo represented the brilliant, measured art of civilization, Hermes was the trickster at its edges — equally essential, and far more fun.</p>`,
+    facts: {
+      "Domain": "Travel, commerce, communication, thieves, boundaries, guide of souls to the Underworld",
+      "Key Symbols": "Caduceus (winged staff with serpents), winged sandals, winged helmet, tortoise",
+      "Family": "Son of Zeus and the Pleiad Maia; half-brother to nearly every Olympian",
+      "Famous For": "Inventing the lyre as an infant; guiding souls to the Underworld; serving as Zeus's personal messenger",
+      "Legacy": "His Roman equivalent Mercury gave his name to the planet and the element. The caduceus is still used — mistakenly — as a symbol of medicine"
+    },
+    dyk: "The word 'hermeneutics' — the theory of interpretation and meaning — comes directly from Hermes, whose role as divine messenger required him to translate between divine and human understanding."
+  },
+  {
+    id: "dionysus", myth: "Greek", symbol: "🍇", name: "Dionysus",
+    epithet: "God of Wine, Madness, and Divine Ecstasy",
+    story: `<p><em>Dionysus</em> was born twice. His mother <em>Semele</em>, a mortal princess, was tricked by the jealous <em>Hera</em> into asking <em>Zeus</em> to reveal himself in his true divine form. Zeus warned her — mortals cannot survive the sight of a god unmasked. She insisted. <strong>Zeus appeared in his full glory and Semele was instantly incinerated.</strong> But Zeus rescued the unborn child, sewing him into his own thigh to gestate until birth. Dionysus emerged from his father's leg — divine, twice-born, and belonging to neither the mortal nor Olympian world cleanly.</p>
+<p>He was the god the other gods didn't quite know what to do with. He wandered the earth spreading the gift of wine and the ecstasy of music and dance. His followers — the <em>Maenads</em> — abandoned civilization entirely, running wild in the mountains in divine frenzy. <strong>Kings who tried to suppress his worship were driven mad, saw their children as animals, tore them apart with bare hands.</strong> The lesson was consistent: resist Dionysus at catastrophic cost.</p>
+<p>Yet he was also the patron of theater — <strong>comedy and tragedy both grew from his festivals</strong>. The mask is his symbol: joy and grief, creation and destruction, god and beast. He alone among the Olympians had a mortal mother and descended to the Underworld to retrieve her, bringing <em>Semele</em> to Olympus as the goddess <em>Thyone</em>. He carried death and resurrection in his own origin story.</p>`,
+    facts: {
+      "Domain": "Wine, festivity, madness, theater, agriculture, death and resurrection",
+      "Key Symbols": "Grapevine, thyrsus (fennel staff topped with pinecone), ivy, leopard, mask",
+      "Family": "Son of Zeus and the mortal Semele; unique among major Olympians in having a mortal mother",
+      "Famous For": "Spreading the gift of wine and ecstatic ritual worship; driving resisters to madness",
+      "Legacy": "Greek theater — the origin of all Western drama — grew from festivals held in his honor. The words 'comedy' and 'tragedy' have roots in his worship"
+    },
+    dyk: "When pirates kidnapped Dionysus, mistaking him for a prince worth ransoming, he caused grapevines to grow across the ship, filled it with phantom beasts, and drove the crew so mad they leapt overboard — where he transformed them into dolphins."
+  },
+
+  // ── NORSE (8) ──
+  {
+    id: "loki", myth: "Norse", symbol: "🦊", name: "Loki",
+    epithet: "The Trickster Who Broke the World",
+    story: `<p><em>Loki</em> was never fully trusted — and never quite distrusted enough. He was the child of giants, admitted to <em>Asgard</em> by blood-oath with <em>Odin</em>, and for ages he served as the gods' sharpest tool. <strong>He was the one who talked them into impossible situations and then talked them back out.</strong> He helped build Asgard's walls, recovered Thor's hammer, outwitted dwarves and giants alike. The gods used him freely and called him friend when it suited them.</p>
+<p>But <em>Loki</em> was also the one who orchestrated the death of <em>Baldr</em> — the most beloved of all gods, the shining one whom nothing could harm. Loki had learned that mistletoe, overlooked in Baldr's protection oath, was his weakness. <strong>He carved it into a dart and guided the blind god Höðr's hand.</strong> Baldr fell. The gods wept. Loki laughed — and then ran. He was caught, transformed, and bound in a cave beneath a serpent that drips venom onto his face for eternity. His wife <em>Sigyn</em> holds a bowl to catch the drops — when she must empty it, the venom falls, and his writhing shakes the earth.</p>
+<p>At <em>Ragnarök</em> he will break free. He will captain the ship <em>Naglfar</em> — built from the fingernails and toenails of the dead — and sail against the gods who imprisoned him. <strong>He will meet Heimdall in battle and they will kill each other.</strong> The world will end. And Loki, who always said it would, will have been right.</p>`,
+    facts: {
+      "Domain": "Trickery, shapeshifting, fire, chaos, the inevitable unraveling of order",
+      "Key Symbols": "Serpent, net, fire, mistletoe",
+      "Family": "Son of giants Fárbauti and Laufey; blood-brother of Odin; father of Fenrir, Jörmungandr, and Hel",
+      "Famous For": "Causing the death of Baldr; being bound until Ragnarök; shapeshifting into every conceivable form",
+      "Legacy": "Modern pop culture has made Loki one of the most recognizable figures from any mythology — appearing in Marvel comics, films, and countless retellings"
+    },
+    dyk: "Loki once transformed into a mare to distract a giant's stallion and prevent the completion of Asgard's walls. He became pregnant and later gave birth to Sleipnir — the eight-legged horse that became Odin's steed."
+  },
+  {
+    id: "thor", myth: "Norse", symbol: "⚡", name: "Thor",
+    epithet: "God of Thunder, Defender of Mankind",
+    story: `<p><em>Thor</em> was not subtle. <em>Odin</em> was cunning, <em>Loki</em> was clever — but <em>Thor</em> was strength made into a god. Red-bearded, enormous, crackling with storm energy, he drove across the sky in a chariot pulled by two goats — <em>Tanngrisnir</em> and <em>Tanngnjóstr</em> — and the rumble of their hooves was thunder. <strong>Where he rode, lightning followed.</strong> He was the protector of Midgard — the human world — and he took that responsibility with earnest, uncomplicated seriousness.</p>
+<p>His hammer <em>Mjölnir</em> — which means "grinder" or "crusher" — was his defining weapon, forged by the dwarf brothers <em>Sindri</em> and <em>Brokkr</em> with a handle made slightly too short because Loki had sabotaged the process by turning into a fly and biting the smith. <strong>Despite its flaw, Mjölnir was the most powerful weapon in the nine worlds</strong> — it always returned when thrown, and when laid at a funeral it consecrated the dead. When it was stolen by the giant <em>Þrymr</em>, Thor disguised himself as a bride to retrieve it. He did so without complaint.</p>
+<p>At <em>Ragnarök</em>, <em>Thor</em> will face his oldest foe — <em>Jörmungandr</em>, the World Serpent that encircles all of Midgard. <strong>They will kill each other.</strong> Thor will slay the serpent with Mjölnir and take nine steps before falling dead from its venom. The greatest defender of humanity will give his life defending it.</p>`,
+    facts: {
+      "Domain": "Thunder, lightning, storms, strength, oak trees, protection of mankind",
+      "Key Symbols": "Mjölnir (hammer), oak tree, goats Tanngrisnir and Tanngnjóstr, iron gloves and belt of strength",
+      "Family": "Son of Odin and the earth-goddess Jörð; husband of Sif; father of Magni, Móði, and Þrúðr",
+      "Famous For": "Wielding Mjölnir; defending Asgard and Midgard from giants; his destined battle with Jörmungandr",
+      "Legacy": "Thursday is named for him — 'Thor's Day.' The Mjölnir symbol was worn by Viking warriors as protection and is still used today"
+    },
+    dyk: "Thor once entered an eating contest against a giant's servant and lost — but the servant was actually wildfire itself. Thor also tried to drink a drinking horn dry and failed — the horn was connected to the ocean, and his drinking caused the tides."
+  },
+  {
+    id: "odin", myth: "Norse", symbol: "🐦", name: "Odin",
+    epithet: "The Allfather Who Sacrificed Everything for Wisdom",
+    story: `<p><em>Odin</em> was never satisfied with what he knew. He was already the king of the gods, father of warriors, lord of Asgard — and still he hungered. <strong>He sacrificed his eye to the well of <em>Mimir</em></strong> for a single drink of its waters, which granted him cosmic wisdom beyond any god's reckoning. He wept one tear into the well as he drank — the only god who understood what true knowledge costs.</p>
+<p>That was not enough. He sought the runes — the primordial letters of reality that encode the universe's deepest secrets. <strong>He hung himself from <em>Yggdrasil</em>, the World Tree, pierced by his own spear, for nine days and nine nights.</strong> No one fed him. No one comforted him. He stared into the void below until the runes revealed themselves, screaming. He grasped them and fell back into the world changed — carrying the power of magic, prophecy, poetry, and runic knowledge. He had paid with near-death for the wisdom to understand death.</p>
+<p><em>Odin</em> wandered the mortal world disguised — a grey-cloaked old man, one-eyed, wide-brimmed hat pulled low. He asked questions. He tested kings and heroes. He meddled constantly, never quite fairly. <strong>He already knew how the story ended — Ragnarök, his own death in the jaws of <em>Fenrir</em></strong> — and chose to live it fully anyway. That, perhaps, was his greatest act of wisdom.</p>`,
+    facts: {
+      "Domain": "Wisdom, war, death, poetry, magic, prophecy, the hunt",
+      "Key Symbols": "Ravens Huginn and Muninn, wolves Geri and Freki, spear Gungnir, eight-legged horse Sleipnir",
+      "Family": "Born of Borr and the giantess Bestla; father of Thor, Baldr, Týr, and many others",
+      "Famous For": "Sacrificing his eye for wisdom; hanging from Yggdrasil to learn the runes; gathering fallen warriors in Valhalla",
+      "Legacy": "Wednesday is named for him — 'Woden's Day.' His ravens Huginn (Thought) and Muninn (Memory) are among the most recognizable symbols in Norse art"
+    },
+    dyk: "Odin's two ravens fly across all nine worlds every day gathering information and return each evening to whisper everything they've seen into his ears. He constantly fears that one day they won't return — especially Muninn, Memory."
+  },
+  {
+    id: "fenrir", myth: "Norse", symbol: "🐺", name: "Fenrir",
+    epithet: "The Wolf Who Will Swallow the Sun",
+    story: `<p><em>Fenrir</em> was born of <em>Loki</em> and the giantess <em>Angrboða</em> — a wolf pup that the gods brought to Asgard, telling themselves they could control what prophecy had already told them they couldn't. <strong>He grew at a terrifying rate.</strong> The gods fed him, and he grew. They built chains, and he snapped them like thread. <em>Gleipnir</em> — the magical ribbon forged by dwarves from impossible ingredients: the sound of a cat's footstep, the beard of a woman, the roots of a mountain, the sinews of a bear, the breath of a fish, the spittle of a bird — finally held him.</p>
+<p>But <em>Fenrir</em> would only wear it if one of the gods placed a hand in his mouth as a pledge of good faith. Only <em>Týr</em>, the god of justice, volunteered. When <em>Fenrir</em> found himself bound and the gods laughed, <strong>he bit off Týr's hand</strong>. He has been chained on an island ever since, a sword propped in his jaws to hold them open, saliva forming rivers, waiting.</p>
+<p>At <em>Ragnarök</em> the chain will break. <strong><em>Fenrir</em> will run with his upper jaw scraping the sky and his lower jaw dragging along the earth, devouring everything between.</strong> He will swallow <em>Odin</em> whole — and <em>Odin's</em> son <em>Víðarr</em> will tear his jaws apart in revenge. The wolf that could not be contained was always going to unmake the world. The gods simply delayed the inevitable.</p>`,
+    facts: {
+      "Domain": "Destruction, chaos, the inevitable end of divine order",
+      "Key Symbols": "Chains (Gleipnir), gaping jaws, rivers of saliva",
+      "Family": "Son of Loki and the giantess Angrboða; brother of Jörmungandr (the World Serpent) and Hel",
+      "Famous For": "Being bound by the magical ribbon Gleipnir; biting off Týr's hand; destined to swallow Odin at Ragnarök",
+      "Legacy": "The bound monster who will one day break free is one of mythology's most enduring archetypes — echoed in countless modern stories"
+    },
+    dyk: "The ingredients used to make Gleipnir — cat's footsteps, woman's beard, mountain roots, bear sinews, fish breath, bird spittle — no longer exist in the world because they were used up in its forging. This is why you cannot find them."
+  },
+  {
+    id: "valkyries", myth: "Norse", symbol: "🛡️", name: "The Valkyries",
+    epithet: "Choosers of the Slain",
+    story: `<p>Over every battlefield they rode — armored women on armored horses, moving through the carnage with impossible calm. The <em>Valkyries</em> — whose name means "choosers of the slain" — did not fight in the battle. <strong>They decided it.</strong> They rode through the chaos selecting which warriors would die and which would live, their choices already woven into the fate the <em>Norns</em> had spun. A glance from a Valkyrie meant the end — and an honor.</p>
+<p>The chosen were not abandoned. <em>Valkyries</em> lifted the fallen and carried them — gently, through all nine worlds — to <em>Valhalla</em>, <em>Odin's</em> golden hall. There the warriors became <em>Einherjar</em>: <strong>an army of the honored dead who would fight beside the gods at Ragnarök</strong>. In Valhalla they feasted each night on boar that regenerated each morning, drank mead that flowed endlessly, and sparred with one another to keep their skills sharp. The Valkyries served them at table, refilling their horns.</p>
+<p>Some Valkyries fell in love with the heroes they chose — and when they loved, they sometimes defied Odin's will, protecting the ones they favored. <strong>For this they were punished: stripped of their divine nature and condemned to live as mortal women until a man brave enough could reach them.</strong> The most famous of these was <em>Brynhildr</em>, sleeping behind a wall of flame until Sigurd rode through fire to find her.</p>`,
+    facts: {
+      "Domain": "Battle fate, death selection, escorting the honored dead, serving in Valhalla",
+      "Key Symbols": "Spear, shield, armored horse, swan feathers (some could transform into swans)",
+      "Family": "Servants and sometimes daughters of Odin; thirteen are named in the sources",
+      "Famous For": "Choosing which warriors die in battle and escorting them to Valhalla; some fell in love with mortal heroes",
+      "Legacy": "The word 'Valkyrie' has become synonymous with fierce, warrior women. Wagner's opera 'Die Walküre' features the famous 'Ride of the Valkyries'"
+    },
+    dyk: "Some Norse sources describe Valkyries as having ravens' feathers rather than armor, connecting them to Odin's ravens. Others describe them appearing as swans by water — the sight of Valkyries bathing as swans was considered a miraculous omen."
+  },
+  {
+    id: "baldr", myth: "Norse", symbol: "✨", name: "Baldr",
+    epithet: "The Shining God Whom All Things Loved",
+    story: `<p>Every living thing loved <em>Baldr</em>. That is not a poetic exaggeration — it was literal fact. He was so radiant, so gentle, so purely good that the world itself was incapable of wishing him harm. His mother <em>Frigg</em> traveled all of creation and extracted oaths from every plant, animal, stone, flame, and disease: <strong>none would harm her son.</strong> Only mistletoe — so young and small she overlooked it — gave no oath.</p>
+<p><em>Loki</em> found the loophole. He fashioned the mistletoe into a dart, found the blind god <em>Höðr</em> standing apart from the games where the other gods were delightedly throwing things at Baldr and watching them bounce off harmlessly, and offered to guide his hand. <strong>The dart struck. Baldr fell. The world went quiet.</strong> It is said that every being wept — gods, giants, dwarves, animals, stones, even the frost — all except Loki disguised as a giantess, whose refusal meant Baldr could not be returned from the Underworld.</p>
+<p><em>Baldr</em> remains in <em>Hel's</em> hall, the most honored of her guests, waiting. The Norse knew he would return — <strong>after Ragnarök, after the world burns and the seas rise and the stars fall, Baldr will walk out of the darkness into a new world reborn.</strong> Goodness, even destroyed, does not end. It waits.</p>`,
+    facts: {
+      "Domain": "Light, purity, beauty, love, summer, rebirth after Ragnarök",
+      "Key Symbols": "White flowers, mistletoe (the instrument of his death), shining light",
+      "Family": "Son of Odin and Frigg; husband of Nanna; brother of Höðr (who unknowingly killed him) and Thor",
+      "Famous For": "Being the most beloved of the gods; his death by mistletoe dart, orchestrated by Loki; his destined resurrection after Ragnarök",
+      "Legacy": "Many scholars see parallels between Baldr's death and resurrection and other dying-and-rising deity myths across world religions"
+    },
+    dyk: "When Baldr's body was placed on his funeral ship Hringhorni for burning, the gods could not push it into the water — it was the largest ship ever built. They had to summon a giantess named Hyrrokkin, who shoved it into the sea with such force the rollers burst into flame."
+  },
+  {
+    id: "freya", myth: "Norse", symbol: "🐈", name: "Freya",
+    epithet: "Goddess of Love, War, and the Magic of Souls",
+    story: `<p><em>Freya</em> was the most desired being in all nine worlds — and she turned that desire into power. She was the goddess of love, beauty, and fertility, but also of death, war, and the deep magic called <em>seiðr</em>. <strong>She was the first to bring this shamanic sorcery to the Aesir gods</strong>, teaching Odin himself — and he was a willing student. She was not soft. She was not decorative. She was the complete expression of life in all its hunger.</p>
+<p>She wore a cloak of falcon feathers that allowed flight between worlds. Around her neck she wore the <em>Brísingamen</em> — a necklace of such stunning beauty that <strong>she paid four dwarf brothers each a night's company to have it forged.</strong> Odin tried to take it from her sleeping form; Loki stole it on his orders; she retrieved it by challenging Loki to a shape-shifting battle and winning. She would not be stripped of what was hers.</p>
+<p>When warriors fell, <em>Freya</em> and <em>Odin</em> split the honored dead between them — <strong>she chose first, taking half to her hall <em>Fólkvangr</em></strong>; Odin took the rest to Valhalla. She wept tears of red gold for her lost husband <em>Óðr</em>, who wandered the world without explanation. She searched for him constantly, taking different names in different lands. Some say Óðr was Odin himself. Some questions, the myths leave open.</p>`,
+    facts: {
+      "Domain": "Love, beauty, fertility, war, death, magic (seiðr), gold",
+      "Key Symbols": "Cats (two pull her chariot), boar Hildisvíni, falcon-feather cloak, Brísingamen necklace",
+      "Family": "Daughter of the sea-god Njörðr; twin sister of Freyr; wife of the wandering god Óðr",
+      "Famous For": "Owning the Brísingamen necklace; teaching seiðr magic to the Aesir; choosing half of all battle-slain warriors for her hall Fólkvangr",
+      "Legacy": "Friday is named for her — 'Freya's Day.' She is one of the most worshipped figures in modern Norse paganism"
+    },
+    dyk: "Freya cried so often searching for her missing husband that her tears, falling into the sea, became gold. This is the Norse explanation for why gold is found in riverbeds and the ocean floor — they are Freya's tears."
+  },
+  {
+    id: "yggdrasil", myth: "Norse", symbol: "🌳", name: "Yggdrasil",
+    epithet: "The World Tree That Holds All of Existence",
+    story: `<p>Before the gods, before the giants, before anything — there was <em>Yggdrasil</em>. The great ash tree at the center of everything, <strong>its roots reaching into three worlds and its canopy sheltering nine</strong>. One root plunged into <em>Asgard</em> near the well of Urðr, where the three <em>Norns</em> — the weavers of fate — watered it daily with sacred water and packed its roots with white clay to keep it strong. Another root reached <em>Jötunheimr</em> and the wisdom-well of <em>Mimir</em>. The third descended into <em>Niflheim</em>, the realm of ice and death, where the dragon <em>Níðhöggr</em> gnawed at it endlessly.</p>
+<p>The tree was never still. <strong>An eagle perched at its crown, trading insults with the dragon below through the squirrel <em>Ratatoskr</em></strong>, who ran up and down carrying messages between them, stirring discord for its own entertainment. Four stags grazed on its leaves. The Norns tended it. Odin hung from it. It bore all of this — the gnawing, the weight of existence, the endless use — because without Yggdrasil, there is nothing to hold reality together.</p>
+<p>At <em>Ragnarök</em>, <em>Yggdrasil</em> will shudder. It will groan. <strong>But it will not fall.</strong> Within its branches, two humans — <em>Líf</em> and <em>Lífþrasir</em> — will shelter through the end of the world and emerge after, to repopulate a new earth. The tree endures because it must. Some things are too fundamental to destroy.</p>`,
+    facts: {
+      "Domain": "The cosmos itself; the connective structure of all nine worlds",
+      "Key Symbols": "The ash tree, three roots, nine worlds, the eagle and dragon at either end",
+      "Family": "Not a being with family — Yggdrasil predates the gods and will outlast them",
+      "Famous For": "Being the axis of all Norse cosmology; being the tree from which Odin hung for nine days to learn the runes",
+      "Legacy": "The World Tree concept — a cosmic axis connecting heaven, earth, and underworld — appears in mythologies worldwide, from Hinduism to shamanic traditions across Siberia and the Americas"
+    },
+    dyk: "The name Yggdrasil means 'Odin's horse' — because 'horse' was a kenning for 'gallows,' and Odin hung from the tree like a hanged man. The World Tree is literally named after Odin's act of self-sacrifice upon it."
+  },
+
+  // ── EGYPTIAN (8) ──
+  {
+    id: "anubis", myth: "Egyptian", symbol: "🐺", name: "Anubis",
+    epithet: "Guardian of the Dead, Weigher of Hearts",
+    story: `<p>In the hall at the edge of everything — where the living cannot go and the dead cannot return — <em>Anubis</em> waited. Black-furred, jackal-headed, precise in all his movements, he had watched over the dead since the first human ever drew their last breath. <strong>He was the one who taught the Egyptians how to preserve bodies</strong> — he had done it first, preparing <em>Osiris</em> after <em>Set</em> scattered his pieces across Egypt, wrapping him so carefully that resurrection was possible.</p>
+<p>His most sacred duty was the <em>Weighing of the Heart</em>. Every soul who died was brought before him into the <em>Hall of Two Truths</em>. On a golden scale, <em>Anubis</em> placed the heart — which contained the full record of every deed done in life — against the feather of <em>Ma'at</em>, goddess of truth and balance. <strong>If the heart was heavier than the feather, the monster <em>Ammit</em> — part lion, part hippo, part crocodile — devoured it, and the soul ceased to exist entirely.</strong> If the heart was light — if the life had been lived with justice and truth — the soul passed into paradise.</p>
+<p><em>Anubis</em> did not judge. He only weighed. <strong>He was scrupulously fair</strong> — the great equalizer before whom pharaoh and peasant were identical. In his domain, all earthly power meant nothing. Only the life actually lived held any weight — which was, of course, the entire point.</p>`,
+    facts: {
+      "Domain": "Death, embalming, mummification, the afterlife, judgment, protection of graves",
+      "Key Symbols": "Jackal or jackal head, scales of justice, flail, black color (representing fertile soil and rebirth)",
+      "Family": "Son of Osiris and Nephthys (or in some accounts, Ra); closely associated with the Osiris myth",
+      "Famous For": "Presiding over the Weighing of the Heart ceremony that determined each soul's fate in the afterlife",
+      "Legacy": "One of the most recognized Egyptian deities worldwide. His image appears on tomb walls across Egypt spanning thousands of years of continuous worship"
+    },
+    dyk: "Anubis's black color was not chosen for its association with death — it was the color of the fertile Nile silt that made life possible. Black represented regeneration and rebirth. His darkness was about life returning, not life ending."
+  },
+  {
+    id: "ra", myth: "Egyptian", symbol: "☀️", name: "Ra",
+    epithet: "The Sun God Who Dies and Rises Every Day",
+    story: `<p>Every morning, <em>Ra</em> was born. He rose from the eastern horizon as the scarab-headed god <em>Khepri</em>, pushing the solar disc across the sky the way a scarab pushes its ball of dung — with absolute, tireless purpose. By noon he was at his peak: <em>Ra</em> in his full blazing glory, seated in his solar barque sailing the sky, the world below illuminated by his presence. <strong>By evening he began his dying, becoming the ram-headed <em>Atum</em></strong>, descending into the west as dusk swallowed the light.</p>
+<p>Each night, while the world slept, <em>Ra</em> sailed through the <em>Duat</em> — the underworld — and this was his most dangerous journey. In the darkest hour before dawn, the great serpent <em>Apep</em> lay in wait, <strong>coiled around the passage, trying to swallow the solar barque whole</strong>. Every night the gods aboard fought Apep back — <em>Set</em>, for all his chaos, was invaluable here, spearing the serpent with a ferocity only a god of destruction could manage.</p>
+<p>Every morning Ra emerged victorious. Every morning he was reborn. <strong>The Egyptians understood their world as one sustained by this nightly battle</strong> — if ever Apep won, the sun would not rise, and the world would end. Priests performed rituals each night to help Ra in his passage. Every dawn was proof that order had prevailed over chaos again. Every sunrise was a miracle earned.</p>`,
+    facts: {
+      "Domain": "The sun, creation, kingship, order (Ma'at), time itself",
+      "Key Symbols": "Solar disc, sun barque, falcon head, scarab beetle (as Khepri), ram head (as Atum at sunset)",
+      "Family": "Self-created in most accounts; father of Shu and Tefnut; grandfather of Geb and Nut; great-grandfather of Osiris, Isis, Set, and Nephthys",
+      "Famous For": "His nightly battle with the serpent Apep to ensure the sun rises each morning; his merger with Amun into the supreme deity Amun-Ra",
+      "Legacy": "Ra's mythology is among the oldest in recorded human history — some hymns to him date to before 2400 BCE"
+    },
+    dyk: "In one myth, Ra grew old and his power weakened. Humanity began plotting against him. Ra wept — and his tears, falling to earth, became bees. The Egyptians believed bees were literally the tears of the sun god."
+  },
+  {
+    id: "isis", myth: "Egyptian", symbol: "🦋", name: "Isis",
+    epithet: "The Great Mother, Mistress of Magic",
+    story: `<p>When <em>Set</em> murdered <em>Osiris</em> — sealed him in a golden coffin, cast him into the Nile, then found him again and chopped his body into fourteen pieces scattered across Egypt — it was <em>Isis</em> who refused to accept it. <strong>She traveled the entire length of Egypt, piece by piece, finding her husband's remains</strong>, gathering them, reassembling him with linen bandages and sacred oils, creating the first mummy. She found all but one piece — his phallus, swallowed by a fish. She fashioned a replacement from gold.</p>
+<p>Then she performed magic that no being before or since has replicated. Hovering over <em>Osiris's</em> body in her falcon form, wings beating to breathe life back into him, <strong>she resurrected him long enough to conceive their son <em>Horus</em></strong>. Osiris could not remain in the living world — he descended to rule the Underworld. Isis hid in the marshes of the Nile Delta, alone, protecting her unborn son from Set's assassins.</p>
+<p><em>Horus</em> was born and grew in hiding, raised by his mother's ferocity and love. Her magic was the greatest in the world — <strong>she once tricked Ra himself into revealing his secret name</strong> by engineering a serpent to bite him, then offering to cure him only if he whispered his true name. He did. She used that name — and its power — ever after. Even the gods feared what Isis might do with love and sufficient cause.</p>`,
+    facts: {
+      "Domain": "Magic, healing, motherhood, fertility, the dead, protection, the throne of Egypt",
+      "Key Symbols": "Throne hieroglyph (her name), wings, the tyet knot (Isis knot), sistrum",
+      "Family": "Daughter of Geb and Nut; sister-wife of Osiris; sister of Set and Nephthys; mother of Horus",
+      "Famous For": "Reassembling Osiris's body after Set dismembered it; her resurrection of Osiris; raising Horus in secret",
+      "Legacy": "Her cult spread beyond Egypt throughout the Roman Empire — she was worshipped from Britain to Mesopotamia. Many scholars see her influence on the iconography of the Virgin Mary and Child"
+    },
+    dyk: "Isis was worshipped for over 3,000 years in Egypt — longer than almost any other deity in human history. When Rome conquered Egypt, her cult didn't die — it spread throughout the Empire, making her one of the most globally worshipped deities of the ancient world."
+  },
+  {
+    id: "osiris", myth: "Egyptian", symbol: "🌿", name: "Osiris",
+    epithet: "Lord of the Dead, God of Resurrection and the Nile",
+    story: `<p><em>Osiris</em> was the first king — the one who taught humanity to farm, to build, to live with law and purpose. Under his reign Egypt was paradise. <strong>His brother <em>Set</em> seethed.</strong> Set was the storm, the desert, the disruption that could never be contained — and watching Osiris beloved by all was more than he could endure. He crafted a magnificent golden coffin precisely to Osiris's measurements, invited him to a feast, and offered it as a gift to whoever fit inside it perfectly. Osiris lay down. The lid slammed shut. Set and his conspirators sealed it with lead and cast it into the Nile.</p>
+<p>The coffin drifted to <em>Byblos</em> on the Phoenician coast, where a great tree grew around it. The king of Byblos had the tree cut into a pillar for his palace. <em>Isis</em> tracked it there, retrieved it, and began her long work of resurrection. But <em>Set</em> found the body again, and this time <strong>dismembered it into fourteen pieces scattered from one end of Egypt to the other</strong>. Isis gathered every piece.</p>
+<p>When <em>Osiris</em> was reassembled and briefly revived, he understood that the living world was no longer his place. <strong>He descended to rule the Underworld</strong>, where he presides over the judgment of souls — the king who was killed, dismembered, and resurrected becoming the master of death and rebirth. His annual flooding of the Nile brought life to Egypt's soil. Even in death, <em>Osiris</em> was the source of all growth.</p>`,
+    facts: {
+      "Domain": "Death, resurrection, the afterlife, agriculture, the Nile flood, fertility, civilization",
+      "Key Symbols": "Green skin (representing vegetation and renewal), crook and flail, white mummy wrappings, djed pillar",
+      "Family": "Son of Geb (earth) and Nut (sky); husband of Isis; father of Horus; brother of Set, Isis, and Nephthys",
+      "Famous For": "Being the first mummy; his murder and dismemberment by Set; his resurrection by Isis; ruling as king of the dead",
+      "Legacy": "The Osiris myth is one of the most complete and influential mythological cycles in history — with themes of murder, resurrection, and divine justice that echo through countless later religions"
+    },
+    dyk: "Osiris is consistently depicted with green skin — not as a symbol of death, but of life, vegetation, and the fertile black soil left by the Nile flood. He was simultaneously the god of death and the god of growth. The Egyptians saw no contradiction."
+  },
+  {
+    id: "horus", myth: "Egyptian", symbol: "🦅", name: "Horus",
+    epithet: "The Falcon King, Avenger of His Father",
+    story: `<p><em>Horus</em> grew up knowing exactly what he had to do. His father <em>Osiris</em> had been murdered by his uncle <em>Set</em>. His mother <em>Isis</em> had kept him alive in the marshes, enduring Set's assassination attempts, raising him in secret for this single purpose. <strong>From boyhood, Horus was prepared for war.</strong> When he came of age, he challenged Set before the tribunal of the gods — and what followed was one of the longest, strangest contests in mythology.</p>
+<p>They fought in the sky as two falcons, tearing at each other. They raced boats of stone — <em>Set</em> cheated by carving his from a mountain peak disguised as stone; <em>Horus</em> outmaneuvered him. <strong>Set gouged out Horus's eye</strong> — the great lunar eye that governed the night — and Horus tore off Set's testicles. The eye was restored by <em>Thoth</em>. The conflict dragged on for eighty years. The gods grew weary of it.</p>
+<p>Finally the tribunal ruled in Horus's favor. <strong>He was crowned king of Egypt, and every pharaoh who ever lived was considered a living Horus.</strong> When they died, they became Osiris. Set was not destroyed — he was given dominion over storms and desert and foreign lands, because even chaos has its necessary function. Horus took his wounded eye and offered it to his father in the Underworld — the <em>Eye of Horus</em>, the most powerful protective symbol in Egyptian magic.</p>`,
+    facts: {
+      "Domain": "Kingship, sky, sun and moon, war, protection, healing",
+      "Key Symbols": "Falcon head, double crown, Eye of Horus (wedjat), white and red crowns of Egypt",
+      "Family": "Son of Osiris and Isis; nephew and enemy of Set; grandson of Geb and Nut",
+      "Famous For": "His eighty-year battle with Set for the throne of Egypt; the loss and restoration of his eye; being the divine model for every Egyptian pharaoh",
+      "Legacy": "The Eye of Horus is one of the most recognized symbols from antiquity — still used in jewelry and art worldwide as a symbol of protection and healing"
+    },
+    dyk: "The Eye of Horus was used by ancient Egyptians in medical prescriptions as a measuring system. Each part of the fractional eye symbol represented a different fraction — 1/2, 1/4, 1/8, 1/16, 1/32, 1/64 — used to measure ingredients in medicine."
+  },
+  {
+    id: "thoth", myth: "Egyptian", symbol: "📜", name: "Thoth",
+    epithet: "God of Writing, Magic, and the Moon",
+    story: `<p>When the gods needed something done with precision and wisdom, they sent for <em>Thoth</em>. When <em>Horus's</em> eye was torn out, <em>Thoth</em> restored it. When <em>Ra</em> needed a scribe, <em>Thoth</em> recorded every word. When souls were judged in the Hall of Two Truths, <strong><em>Thoth</em> stood beside the scales with his reed and palette, writing down the verdict</strong> — the ultimate bureaucrat of eternity, precise and impartial.</p>
+<p>He was self-created — or created by the power of his own voice, the first words that formed reality. <strong>He invented writing, mathematics, science, and magic.</strong> The sacred texts of Egypt — the <em>Book of the Dead</em>, the <em>Books of Thoth</em> — were said to have been written by his hand. Scribes across Egypt left small offerings to him before beginning their work. His words were reality itself, because in Egyptian understanding, to name something correctly was to command it.</p>
+<p>The Greeks identified him with <em>Hermes</em>, creating <em>Hermes Trismegistus</em> — "Thrice-Greatest Hermes" — the mythical author of a vast body of mystical and philosophical writing. <strong>Medieval alchemists believed he had written the ultimate guide to transforming matter and spirit.</strong> The Hermetic tradition — still alive in Western esotericism today — traces itself back to the ibis-headed god standing patiently at his writing desk, recording everything.</p>`,
+    facts: {
+      "Domain": "Writing, knowledge, wisdom, the moon, magic, time, science, the judgment of souls",
+      "Key Symbols": "Ibis head or baboon form, writing palette and reed, crescent moon, the Was scepter",
+      "Family": "Self-created in most accounts; closely associated with Ra and Osiris; in some versions a son of Ra",
+      "Famous For": "Inventing writing and mathematics; restoring Horus's eye; recording the judgment of souls; being equated with Hermes by the Greeks",
+      "Legacy": "The Hermetic tradition, Renaissance alchemy, and certain strands of Western mysticism all claim descent from Thoth's legendary wisdom texts"
+    },
+    dyk: "Thoth was said to have won five extra days from the Moon in a game of dice, giving them to the sky-goddess Nut so she could give birth to her five children (Osiris, Horus the Elder, Set, Isis, and Nephthys) — the Egyptian calendar originally had only 360 days."
+  },
+  {
+    id: "seth", myth: "Egyptian", symbol: "🌪️", name: "Set",
+    epithet: "God of Chaos, Storms, and the Desert",
+    story: `<p><em>Set</em> was born violently — tearing himself from his mother <em>Nut's</em> side early, unwilling to wait. From his first moment he was the disruption, the force that refused to be contained by proper order. <strong>He was the red god — red hair, red skin, the color of sand and blood — and he ruled the desert, the storms, and all the forces that lay outside civilization's edges.</strong> He was not simply evil. He was necessary. Without him, Ra's solar barque would be swallowed by Apep each night.</p>
+<p>He murdered his brother <em>Osiris</em> — not from simple jealousy but from something deeper: <strong>he could not bear to exist in Osiris's shadow</strong>, could not be the lesser thing in a world that valued Osiris's calm order above his wild power. When his crime was punished — when Horus eventually wrested the throne from him after eighty years of war — the gods did not destroy Set. They could not afford to. He was too useful.</p>
+<p>He was given the bow of <em>Ra's</em> barque, the most important post in the nightly journey. <strong>Every night, Set alone was ferocious enough to face Apep, to drive the spear through the serpent's body and hold it at bay</strong> while the sun passed through. The god who committed the worst crime in Egyptian myth was also the one who saved the world every single night. Set's story refuses to be simple. Chaos, properly directed, is the only thing that can fight the void.</p>`,
+    facts: {
+      "Domain": "Chaos, storms, desert, war, foreign lands, strength",
+      "Key Symbols": "The Set animal (unidentified creature with a forked tail and long curved snout), the color red, the Was scepter",
+      "Family": "Son of Geb and Nut; brother of Osiris, Isis, and Nephthys; husband of Nephthys",
+      "Famous For": "Murdering and dismembering Osiris; his eighty-year war with Horus for the throne of Egypt; defending Ra's solar barque against Apep",
+      "Legacy": "Set is one of mythology's most nuanced 'villains' — a god who commits terrible acts while also performing essential cosmic functions. His reputation varied enormously across Egyptian history"
+    },
+    dyk: "During the reign of Ramesses the Great, Set was actively worshipped as a protector god — Ramesses himself bore the epithet 'Beloved of Set.' Two of Ramesses's sons were named Sety. Set's reputation as purely evil only solidified much later."
+  },
+  {
+    id: "bastet", myth: "Egyptian", symbol: "🐱", name: "Bastet",
+    epithet: "The Cat Goddess, Protector of the Home",
+    story: `<p><em>Bastet</em> was everything the cat embodies: graceful and deadly, affectionate and independent, gentle to those she loved and savage to those who threatened them. She was the Eye of <em>Ra</em> — one of several goddesses who could act as the sun god's instrument of vengeance when the world required it. <strong>In her leonine form she was a lioness, ferocious enough to raze nations.</strong> In her domestic form she was cat-headed, holding a sistrum and a protective aegis, watching over homes and children and women in childbirth.</p>
+<p>Her center of worship was the city of <em>Bubastis</em>, where her temple stood beside the Nile and hundreds of thousands of pilgrims gathered for her annual festival. The Greek historian <em>Herodotus</em> visited and was astonished — <strong>he described it as the most joyful celebration he had ever witnessed</strong>: boats filled with music, singing, dancing, offerings of wine. The city of cats, celebrating the cat goddess, with half a million attendees.</p>
+<p>Cats in Egypt were not merely beloved — they were sacred. <strong>Killing a cat, even accidentally, was punishable by death.</strong> When a household cat died, the family shaved their eyebrows as a sign of mourning. Bastet's gift to Egypt was the understanding that small, quiet creatures — the ones who sleep in sunlight and purr in the dark — carry something divine in them. Egypt never forgot it.</p>`,
+    facts: {
+      "Domain": "Home, fertility, childbirth, women, music, dance, protection from disease and evil spirits, cats",
+      "Key Symbols": "Cat or cat-headed woman, sistrum (musical rattle), protective aegis, basket",
+      "Family": "Daughter of Ra; in some accounts sister of Sekhmet (the leonine goddess of destruction)",
+      "Famous For": "Her magnificent festival at Bubastis; the sacred status of cats in Egyptian society; her dual nature as gentle protector and fierce destroyer",
+      "Legacy": "Egypt's reverence for cats influenced the entire ancient world. Cats were eventually exported as prized gifts. The modern domestic cat population descends largely from the African wildcats domesticated in ancient Egypt"
+    },
+    dyk: "Archaeologists have discovered a cemetery at Bubastis containing over 300,000 mummified cats — dedicated offerings to Bastet. The sheer scale of cat mummification in ancient Egypt was so enormous that in the 19th century, shiploads of mummified cats were exported to Europe to be ground into fertilizer."
+  },
+
+  // ── JAPANESE (8) ──
+  {
+    id: "amaterasu", myth: "Japanese", symbol: "🌟", name: "Amaterasu",
+    epithet: "Goddess of the Sun, Queen of the Heavens",
+    story: `<p><em>Amaterasu</em> was born when the god <em>Izanagi</em> washed his left eye after returning from the Underworld — born from his act of cleansing, she blazed into existence and he immediately recognized her as something supreme. <strong>He gave her the heavens to rule, placing the jewel necklace around her neck and declaring the sky her domain.</strong> She was the origin of light, warmth, and the agricultural cycle that made life possible. Every emperor of Japan was considered her descendant.</p>
+<p>But her brother <em>Susanoo</em>, the storm god, was volatile and grieving. He wept so violently for their dead mother that the mountains shook and the seas raged. When he came to the heavens to say farewell before his exile, <em>Amaterasu</em> suspected an invasion. <strong>They exchanged items and breathed children from them as a test of loyalty — but Susanoo's subsequent rampage through the heavenly rice paddies, destroying everything in grief and fury, was too much.</strong> Amaterasu retreated into a cave — the Ama-no-Iwato — and sealed herself inside.</p>
+<p>With her inside the cave, <strong>the world went dark. Crops died. Eight hundred evil spirits emerged.</strong> The eight million gods of Japan gathered outside the cave entrance in desperation. They tried everything. Finally the goddess <em>Ame-no-Uzume</em> began a wild, comedic dance that made all the gods burst into uproarious laughter. Curiosity overcame Amaterasu. She opened the cave door a crack — and the gods pulled her the rest of the way out. <strong>Light returned to the world.</strong> She returned because she couldn't resist finding out what was funny.</p>`,
+    facts: {
+      "Domain": "The sun, heaven, light, agriculture, weaving, the imperial family of Japan",
+      "Key Symbols": "The sun, the sacred mirror (Yata no Kagami), the Ise Grand Shrine",
+      "Family": "Daughter of Izanagi and Izanami; sister of Susanoo (storm) and Tsukuyomi (moon)",
+      "Famous For": "Hiding in the cave Ama-no-Iwato and plunging the world into darkness; being the divine ancestor of Japan's imperial line",
+      "Legacy": "The Ise Grand Shrine — Japan's most sacred Shinto site — is dedicated to Amaterasu and has been rebuilt in identical form every twenty years for over 1,300 years"
+    },
+    dyk: "The three imperial treasures of Japan — the sacred mirror, the jewel, and the sword — are said to have been given to the first emperor by Amaterasu herself. These treasures are still held by the imperial family today and used in coronation ceremonies, though they are never displayed publicly."
+  },
+  {
+    id: "susanoo", myth: "Japanese", symbol: "⚡", name: "Susanoo",
+    epithet: "The Tempestuous Storm God",
+    story: `<p><em>Susanoo</em> was born from <em>Izanagi's</em> nose as he purified himself — a violent birth for a violent god. He was given the seas to rule, but he refused. He wanted only to go to the underworld where his dead mother <em>Izanami</em> was, and he wept so devastatingly that the whole world suffered — mountains collapsed, seas evaporated, evil spirits multiplied. <strong>His father exiled him for refusing his duties and destroying everything with his grief.</strong></p>
+<p>Exiled and wandering, he came to a weeping family on earth. An eight-headed serpent — <em>Yamata no Orochi</em> — had eaten seven of their eight daughters and was coming for the last. <strong>Susanoo devised a trap: eight barrels of sake, one for each head.</strong> The serpent drank them all and passed out. Susanoo drew his sword and hacked through it — and inside one of its tails he found a magnificent blade, the <em>Kusanagi-no-Tsurugi</em>, the Grass-Cutting Sword. He gave it to his sister Amaterasu as a peace offering.</p>
+<p>The family's daughter became his wife. <strong>He wrote what is considered the first waka poem in Japanese history</strong> on their wedding night — a verse about the clouds gathering over his palace, layered as the bedchamber he was preparing. The storm god who had caused nothing but destruction wrote the first love poem. He settled into humanity's world more comfortably than heaven had ever suited him.</p>`,
+    facts: {
+      "Domain": "Storms, sea, summer, agriculture, poetry, snakes",
+      "Key Symbols": "Sword, storms, serpents, sake barrels, the sea",
+      "Family": "Son of Izanagi; brother of Amaterasu and Tsukuyomi; father of Ōkuninushi",
+      "Famous For": "Slaying the eight-headed serpent Yamata no Orochi; discovering the legendary sword Kusanagi; writing Japan's first waka poem",
+      "Legacy": "The sword Kusanagi is one of Japan's three imperial treasures. The Yasaka Shrine in Kyoto's famous Gion Matsuri festival celebrates Susanoo"
+    },
+    dyk: "Susanoo's descendants ruled the land of Japan for many generations before the sun goddess Amaterasu sent her grandson Ninigi to take over. Susanoo's line didn't vanish — they became the earthly rulers of Izumo, and the great Izumo Taisha shrine is dedicated to his descendant Ōkuninushi."
+  },
+  {
+    id: "izanagi", myth: "Japanese", symbol: "🌊", name: "Izanagi & Izanami",
+    epithet: "The Creator Gods Who Made the World — and Death",
+    story: `<p>Before Japan, there was only chaos and ocean. <em>Izanagi</em> and <em>Izanami</em> stood on the floating bridge of heaven and stirred the sea with a jeweled spear. When they lifted it, the brine that dripped from the tip solidified into the first island. <strong>They descended, built a pillar, and walked around it — meeting, speaking, and creating the islands and gods of Japan</strong> through their union.</p>
+<p>When <em>Izanami</em> died giving birth to the fire god, <strong><em>Izanagi</em> was inconsolable</strong>. He followed her into <em>Yomi</em> — the underworld — begging her to return. She asked him to wait, to not look at her while she petitioned the gods of death. He could not wait. He lit a comb on fire to see in the darkness — and saw her: rotting, maggot-covered, decomposing. <em>Izanami</em> was humiliated and enraged. She sent the dead to chase him. He fled.</p>
+<p>At the entrance to Yomi he rolled a great boulder across the passage between worlds. <strong><em>Izanami</em> screamed from the other side that she would kill a thousand of his people every day. He answered that he would cause fifteen hundred births.</strong> In that exchange — the very first argument in Japanese mythology — death and life found their balance. Izanagi washed himself in a river after his escape. From his washing were born Amaterasu, Tsukuyomi, and Susanoo. The world was complete.</p>`,
+    facts: {
+      "Domain": "Creation, islands of Japan, life, death, the boundary between worlds",
+      "Key Symbols": "Jeweled spear, the pillar of heaven, the boulder blocking Yomi",
+      "Family": "Primordial divine couple; parents of Amaterasu, Tsukuyomi, Susanoo, and the islands of Japan",
+      "Famous For": "Creating the Japanese islands by stirring the sea; Izanagi's descent to the underworld and flight from the dead Izanami",
+      "Legacy": "Their story is told in the Kojiki (712 CE), the oldest surviving chronicle of Japan — the foundational text of Japanese mythology and Shinto religion"
+    },
+    dyk: "The Kojiki records that Izanagi and Izanami initially made a mistake when they first walked around the pillar — Izanami spoke first, which was improper. Their first child was born deformed because of this error. They corrected their approach, Izanagi spoke first, and everything afterward succeeded."
+  },
+  {
+    id: "kitsune", myth: "Japanese", symbol: "🦊", name: "Kitsune",
+    epithet: "The Fox Spirit — Trickster, Messenger, and Shapeshifter",
+    story: `<p>A <em>kitsune</em> is born a fox — but foxes, in Japan, are not merely foxes. They accumulate wisdom with age, and with wisdom comes power, and with power comes transformation. After a hundred years, a fox grows its second tail. <strong>After a thousand years, it has nine tails, fur that shimmers white or gold, and the ability to see everything happening in the world.</strong> A nine-tailed fox has become something divine — a messenger of Inari, the god of rice, foxes, and prosperity, and one of the most powerful spiritual beings in Japanese mythology.</p>
+<p>Kitsune are shapeshifters of extraordinary skill. They most often take the form of beautiful women, entering human lives for reasons that range from divine service to personal curiosity to elaborate revenge. <strong>Some kitsune stories are love stories</strong> — the fox who falls in love with a human, lives as his wife for years, raises his children, and is finally revealed by a dog or a mirror — and flees back to the wild, though in some versions she stays, because love is stronger than nature. Other kitsune stories are terrifying — the fox that enslaves an entire household, drives men to ruin, and vanishes without explanation.</p>
+<p>You can sometimes tell a kitsune in disguise by her shadow, which still shows a fox. <strong>She may have difficulty hiding a tail when drunk</strong>. She will be unnervingly beautiful. She will know things she shouldn't. Whether she's there to help or harm depends entirely on whether you've earned her favor or her ire — and foxes remember everything.</p>`,
+    facts: {
+      "Domain": "Trickery, wisdom, shapeshifting, magic, rice and agriculture (as Inari's messengers), love, revenge",
+      "Key Symbols": "Nine tails, white or golden fur, the hoshi no tama (star ball), foxfire, the color white",
+      "Family": "Not a singular deity — kitsune are a class of supernatural fox beings; associated with the deity Inari",
+      "Famous For": "Shapeshifting into human form, usually women; possessing humans; serving as messengers of the god Inari; their nine-tail progression of power",
+      "Legacy": "Kitsune are among the most enduring figures in Japanese folklore, appearing in art, literature, manga, anime, and video games for over a thousand years continuously"
+    },
+    dyk: "Inari shrines — the most numerous type of Shinto shrine in Japan, with over 32,000 — all feature fox statues rather than lion-dogs (komainu). These foxes are often depicted holding keys in their mouths: the key to the rice granary, representing Inari's gift of abundance."
+  },
+  {
+    id: "raijin", myth: "Japanese", symbol: "⛈️", name: "Raijin & Fujin",
+    epithet: "Gods of Thunder and Wind",
+    story: `<p>You hear <em>Fujin</em> before you see him. He runs ahead of storms — a wild, muscular figure clutching an enormous bag on his shoulders, green-skinned and grinning, releasing the winds that bend trees and scatter everything not tied down. <strong>He was among the first beings created from the chaos of the afterbirth of creation</strong>, and he has been running ever since, too full of energy to stop.</p>
+<p>Behind him comes <em>Raijin</em> — the thunder god, red-skinned, surrounded by a ring of drums. He beats them with hammers as he leaps between clouds, and each strike releases the crack and boom of thunder. <strong>Together they are the storm made divine</strong> — the wind that arrives first, and the thunder that follows. Lightning is the byproduct of Raijin's work; the drumming is the performance he never tires of.</p>
+<p>They are not gentle gods. Farmers prayed to them desperately, because the same storms that destroyed crops also brought the rain that grew them. Children were told to hide their navels during storms — <strong><em>Raijin</em> was said to eat the belly buttons of children who left them exposed</strong> in a thunderstorm. This kept children indoors and safe from lightning. The myth, as myths often do, served practical purposes. Raijin and Fujin appear together in art across Japan — most famously in the paired screen paintings by Tawaraya Sōtatsu, one of the masterpieces of Japanese art.</p>`,
+    facts: {
+      "Domain": "Raijin: thunder, lightning, storms. Fujin: wind, storms, the sky",
+      "Key Symbols": "Raijin: ring of drums, lightning. Fujin: bag of winds, wild appearance",
+      "Family": "Both emerged from Izanami's decomposing body in the Underworld; considered children of the primordial chaos",
+      "Famous For": "Together representing the full power of storms; Raijin eating children's navels; their iconic paired depictions in Japanese art",
+      "Legacy": "The paired Raijin and Fujin statues and paintings are among the most recognizable images in Japanese art history. They guard the entrance of many temples"
+    },
+    dyk: "Raijin is credited with saving Japan from the Mongol invasions of 1274 and 1281 CE — violent storms destroyed the Mongol fleets both times. The Japanese called this the kamikaze — 'divine wind.' The term was revived for the suicide pilots of WWII."
+  },
+  {
+    id: "tengu", myth: "Japanese", symbol: "👺", name: "Tengu",
+    epithet: "The Mountain Demons Who Teach Warriors and Punish the Arrogant",
+    story: `<p><em>Tengu</em> live in the mountains, in the oldest trees, in the places where human civilization thins into something wilder. They are part bird, part human — winged, long-nosed, dressed in the robes of mountain ascetics, carrying fans that can raise hurricanes and swords that can cut through delusion. <strong>They were once thought purely evil</strong> — demons who lured Buddhist monks into the wilderness and drove them mad with illusions. But over centuries their nature grew more complex.</p>
+<p>The greatest <em>tengu</em> — the <em>dai-tengu</em> — became teachers. They taught sword techniques to warriors who were worthy, passing on skills beyond human capacity. <strong>The legendary swordsman Minamoto no Yoshitsune was said to have been trained in secret by the tengu lord <em>Sōjōbō</em></strong> — who appeared as an old man but was actually ancient beyond reckoning, and who taught him every sword technique in existence in a single mountain hideaway.</p>
+<p>What the <em>tengu</em> cannot abide is arrogance. A monk who preaches without wisdom, a warrior who fights for pride instead of justice, a ruler who places status above truth — <strong>the tengu will find them</strong>. They will carry them away, deposit them in strange places, strip away their false certainties, and return them — humbled, sometimes enlightened, occasionally broken. The mountain has no patience for pretense. Neither do the things that live there.</p>`,
+    facts: {
+      "Domain": "Mountains, martial arts, arrogance and its punishment, Buddhism (as adversaries), wisdom",
+      "Key Symbols": "Long nose (dai-tengu) or beak (ko-tengu), feathered wings, tengu-geta (tall wooden sandals), feather fan, sword",
+      "Family": "Associated with Susanoo in some accounts; sometimes considered fallen Buddhist monks or warriors",
+      "Famous For": "Training legendary swordsmen in secret mountain dojos; punishing the prideful; their long noses",
+      "Legacy": "The tengu mask is one of the most iconic images in Japanese art and theater. They appear constantly in modern manga and anime, typically as powerful, ancient, morally complex beings"
+    },
+    dyk: "The word 'tengu' may come from the Chinese 'tiangou' — a dog-shaped celestial being that eats the sun and moon during eclipses. The Japanese tengu evolved in an entirely different direction from their Chinese ancestor, becoming one of Japan's most distinctive and complex supernatural figures."
+  },
+  {
+    id: "izanami", myth: "Japanese", symbol: "🌑", name: "Izanami",
+    epithet: "Queen of the Dead, Mother of Creation",
+    story: `<p>She was half of the everything. With <em>Izanagi</em> she stirred the ocean into islands, built the pillar of heaven, and breathed the gods of Japan into existence. <strong>She died doing it</strong> — the fire god <em>Kagutsuchi</em>, her final child, burned her from the inside as she gave him life. She descended into <em>Yomi</em>, the underworld, into a darkness that no living thing was supposed to enter.</p>
+<p>When <em>Izanagi</em> followed her — desperate, refusing to accept what was — she told him to wait. She would petition the gods of Yomi. He must not look at her. He could not keep his promise. <strong>When he lit his comb and saw her — rotting, filled with maggots, the corpse of his beloved wife — he fled screaming.</strong> And <em>Izanami</em>, who had been preparing to leave, was seen in the most humiliating state imaginable. Her love turned.</p>
+<p>She sent the dead after him. She sent thunder beings, demons, armies of Yomi. <strong>He threw objects behind him to slow his pursuit</strong> — peaches, a comb — and barely escaped. He sealed the passage to Yomi with a boulder. She stood on the other side and declared she would kill a thousand of his people each day. He declared he would cause fifteen hundred births to replace them. In her death, <em>Izanami</em> became the source of death itself — the goddess who makes endings necessary. <strong>She was not evil. She was changed.</strong> The Underworld does that.</p>`,
+    facts: {
+      "Domain": "Creation, death, the Underworld (Yomi), decay, endings",
+      "Key Symbols": "The boulder sealing Yomi, darkness, the underworld itself",
+      "Family": "Divine partner of Izanagi; mother of the islands of Japan, Amaterasu, Tsukuyomi, Susanoo, and all the elemental gods",
+      "Famous For": "Co-creating Japan with Izanagi; dying in childbirth; becoming queen of the dead after Izanagi fled from her; their final exchange defining the balance of death and birth",
+      "Legacy": "Her story is one of mythology's most poignant — a creator goddess becoming a death goddess not through evil but through grief, transformation, and the violation of her dignity"
+    },
+    dyk: "Before her death, Izanami gave birth to fourteen islands and thirty-five deities. Her death caused Izanagi to kill Kagutsuchi, the fire god who killed her — and from Kagutsuchi's blood and body came eight more deities, including gods of mountains, water, and earth."
+  },
+  {
+    id: "benzaiten", myth: "Japanese", symbol: "🎵", name: "Benzaiten",
+    epithet: "Goddess of Everything That Flows",
+    story: `<p><em>Benzaiten</em> — <em>Benten</em> to those who love her — is the goddess of everything that flows: water, music, time, words, knowledge, and luck. She arrived in Japan from India, born of the Hindu river goddess <em>Saraswati</em> who crossed the sea and became something new — a Japanese deity with a biwa (a lute-like instrument) in her hands, a serpent or dragon as her companion, and a reputation for blessing artists, musicians, scholars, and gamblers.</p>
+<p>She was the only woman among the <em>Shichi Fukujin</em> — the Seven Lucky Gods of Japan, whose treasure ship sailing into harbor on New Year's Day brings good fortune to those who dream of it. <strong>She is depicted on islands</strong> — Enoshima, Chikubushima, Miyajima — because water is her domain and islands rise from it.</p>
+<p>Her nature contains a contradiction that her worshippers accept completely: <strong>she blesses love and also destroys it.</strong> She is notoriously jealous. Shrine traditions sometimes warn that couples who pray together at Benzaiten's shrines may be cursed with separation — she may want her devotees' attention entirely to herself. But artists, musicians, writers — those who pour their whole heart into something that flows — find in her a fiercely devoted patron. <strong>She rewards total commitment.</strong> She always has.</p>`,
+    facts: {
+      "Domain": "Water, music, arts, eloquence, knowledge, time, wealth, love, luck",
+      "Key Symbols": "Biwa (lute), white serpent, jewel, sword, bow and arrows, torii gates rising from water",
+      "Family": "Japanese form of the Hindu goddess Saraswati; one of the Seven Lucky Gods (Shichi Fukujin)",
+      "Famous For": "Being the sole female among the Seven Lucky Gods; her jealous nature; her patronage of artists and musicians; her association with island shrines",
+      "Legacy": "Her three main shrines — Enoshima, Chikubushima, and Itsukushima (Miyajima) — are among Japan's most visited sites. The iconic floating torii gate of Miyajima is in her shrine's precinct"
+    },
+    dyk: "White snakes are considered messengers of Benzaiten — seeing one is considered exceptionally good luck. Some of her shrines keep albino snakes on the grounds as sacred animals. A white snake appearing in your home was traditionally seen as Benzaiten's blessing on the household."
+  }
+];
+
+let currentFilter = 'All';
+let activeEntry = null;
+
+function filterMyths(myth) {
+  currentFilter = myth;
+  document.querySelectorAll('.myth-tab').forEach(t => t.classList.remove('active'));
+  document.querySelector(`.myth-tab[data-myth="${myth}"]`).classList.add('active');
+  renderGrid();
+}
+
+function renderGrid() {
+  const grid = document.getElementById('entry-grid');
+  const filtered = currentFilter === 'All' ? MYTHS : MYTHS.filter(m => m.myth === currentFilter);
+
+  grid.innerHTML = filtered.map(m => `
+    <button class="entry-btn ${activeEntry === m.id ? 'active' : ''}" 
+            data-myth="${m.myth}" onclick="showMyth('${m.id}')">
+      <span class="entry-symbol">${m.symbol}</span>
+      <div class="entry-myth-tag tag-${m.myth.toLowerCase()}">${m.myth}</div>
+      <div class="entry-name">${m.name}</div>
+      <div class="entry-epithet">${m.epithet.split(',')[0]}</div>
+    </button>`).join('');
+}
+
+function showMyth(id) {
+  const myth = MYTHS.find(m => m.id === id);
+  if (!myth) return;
+
+  activeEntry = id;
+  renderGrid(); // update active state
+
+  const factsHTML = Object.entries(myth.facts).map(([k,v]) => `
+    <div class="fact-item">
+      <div class="fact-label">${k}</div>
+      <div class="fact-value">${v}</div>
+    </div>`).join('');
+
+  document.getElementById('myth-display').innerHTML = `
+    <div class="myth-card" data-myth="${myth.myth}">
+      <div class="card-header">
+        <div>
+          <div class="myth-origin origin-${myth.myth.toLowerCase()}">${myth.myth} Mythology</div>
+          <div class="myth-title">${myth.name}</div>
+          <div class="myth-epithet">${myth.epithet}</div>
+        </div>
+        <div class="myth-symbol">${myth.symbol}</div>
+      </div>
+      <div class="story-section">
+        <div class="section-label">The Story</div>
+        <div class="story-text">${myth.story}</div>
+      </div>
+      <div class="facts-section">
+        <div class="section-label">The Facts</div>
+        <div class="facts-grid">${factsHTML}</div>
+      </div>
+      <div class="dyk-section">
+        <div class="dyk-inner">
+          <div class="dyk-icon">⚡</div>
+          <div class="dyk-text"><strong>Did you know?</strong> ${myth.dyk}</div>
+        </div>
+      </div>
+      <div class="card-footer">
+        <div class="footer-note">Curated by Andie's Myth Machine · freakandie.com</div>
+      </div>
+    </div>`;
+
+  // Smooth scroll to card
+  setTimeout(() => {
+    document.getElementById('myth-display').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }, 100);
+}
+
+// Init
+renderGrid();
+</script>
+</body>
+</html>

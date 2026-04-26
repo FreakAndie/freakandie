@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Logic Lab — freakandie.com</title>
+<meta name="description" content="15 brain-bending logic puzzles and visual pattern challenges. Free. No timer pressure. Just pure thinking.">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=Syne+Mono&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0f13;
+    --surface: #16161c;
+    --surface2: #1e1e26;
+    --lime: #c8ff00;
+    --lime2: #a0cc00;
+    --violet: #8866ff;
+    --violet2: #aa88ff;
+    --coral: #ff5566;
+    --cyan: #00ddcc;
+    --text: #e0e0ee;
+    --dim: #5a5a70;
+    --border: rgba(200,255,0,0.1);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Grid background */
+  body::before {
+    content: '';
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(200,255,0,0.025) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(200,255,0,0.025) 1px, transparent 1px);
+    background-size: 32px 32px;
+    pointer-events: none;
+  }
+
+  /* ── HEADER ── */
+  header {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    padding: 14px 32px;
+    display: flex; justify-content: space-between; align-items: center;
+    background: rgba(15,15,19,0.96);
+    border-bottom: 1px solid var(--border);
+  }
+  .header-left { display: flex; flex-direction: column; gap: 1px; }
+  .header-candy { font-family: 'Syne Mono', monospace; font-size: 0.6rem; letter-spacing: 0.3em; color: var(--lime); text-transform: uppercase; }
+  .header-title { font-size: 1rem; font-weight: 800; color: var(--text); letter-spacing: -0.02em; }
+  .header-right { display: flex; gap: 10px; align-items: center; }
+  .nav-btn {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.15em; color: var(--dim);
+    text-decoration: none; text-transform: uppercase;
+    border: 1px solid rgba(200,255,0,0.15); padding: 6px 12px; transition: all 0.2s;
+  }
+  .nav-btn:hover { color: var(--lime); border-color: rgba(200,255,0,0.4); }
+  .coffee-btn {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.15em; color: var(--coral);
+    text-decoration: none; text-transform: uppercase;
+    border: 1px solid rgba(255,85,102,0.35); padding: 6px 12px; transition: all 0.2s;
+  }
+  .coffee-btn:hover { background: var(--coral); color: #fff; }
+
+  /* ── SCORE HUD ── */
+  #score-hud {
+    position: fixed; bottom: 24px; right: 24px; z-index: 100;
+    background: var(--surface); border: 1px solid var(--border);
+    padding: 12px 18px; text-align: center;
+  }
+  .hud-label { font-family: 'Syne Mono', monospace; font-size: 0.55rem; letter-spacing: 0.3em; color: var(--dim); text-transform: uppercase; margin-bottom: 4px; }
+  .hud-score { font-size: 1.4rem; font-weight: 800; color: var(--lime); line-height: 1; }
+  .hud-total { font-family: 'Syne Mono', monospace; font-size: 0.6rem; color: var(--dim); margin-top: 2px; }
+
+  /* ── MAIN ── */
+  main { position: relative; z-index: 10; max-width: 860px; margin: 0 auto; padding: 100px 24px 100px; }
+
+  /* ── HERO ── */
+  .hero { text-align: center; margin-bottom: 56px; }
+  .hero-eyebrow { font-family: 'Syne Mono', monospace; font-size: 0.65rem; letter-spacing: 0.4em; color: var(--lime); text-transform: uppercase; margin-bottom: 16px; opacity: 0; animation: fadeUp 0.7s 0.2s forwards; }
+  .hero-title {
+    font-size: clamp(3rem, 10vw, 6rem); font-weight: 800;
+    line-height: 0.95; letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    opacity: 0; animation: fadeUp 0.7s 0.4s forwards;
+  }
+  .hero-title .logic { color: var(--lime); display: block; }
+  .hero-title .lab { color: var(--text); display: block; }
+  .hero-sub {
+    font-size: 1rem; color: var(--dim); line-height: 1.7;
+    max-width: 480px; margin: 0 auto 32px;
+    opacity: 0; animation: fadeUp 0.7s 0.6s forwards;
+  }
+  .hero-sub strong { color: var(--text); }
+
+  /* Progress bar */
+  .progress-track {
+    background: var(--surface2); height: 4px; margin: 0 auto 8px; max-width: 400px;
+    opacity: 0; animation: fadeUp 0.7s 0.8s forwards;
+  }
+  .progress-fill { height: 100%; background: var(--lime); transition: width 0.5s ease; width: 0%; }
+  .progress-label { font-family: 'Syne Mono', monospace; font-size: 0.6rem; color: var(--dim); letter-spacing: 0.2em; opacity: 0; animation: fadeUp 0.7s 0.9s forwards; }
+
+  /* ── FILTER TABS ── */
+  .filter-tabs {
+    display: flex; gap: 8px; margin-bottom: 32px; flex-wrap: wrap;
+    opacity: 0; animation: fadeUp 0.7s 1s forwards;
+  }
+  .filter-tab {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 8px 16px; background: transparent;
+    border: 1px solid var(--border); color: var(--dim);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .filter-tab:hover { color: var(--lime); border-color: rgba(200,255,0,0.3); }
+  .filter-tab.active { background: var(--lime); color: var(--bg); border-color: var(--lime); font-weight: 700; }
+
+  /* ── PUZZLE GRID ── */
+  #puzzle-grid { display: flex; flex-direction: column; gap: 16px; }
+
+  /* ── PUZZLE CARD ── */
+  .puzzle-card {
+    background: var(--surface); border: 1px solid var(--border);
+    position: relative; overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .puzzle-card:hover { border-color: rgba(200,255,0,0.2); }
+  .puzzle-card.solved { border-color: rgba(200,255,0,0.4); }
+  .puzzle-card.solved::after {
+    content: '✓ SOLVED';
+    position: absolute; top: 16px; right: 16px;
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.55rem; letter-spacing: 0.3em;
+    color: var(--lime); background: rgba(200,255,0,0.08);
+    padding: 4px 10px; border: 1px solid rgba(200,255,0,0.3);
+  }
+
+  .puzzle-header {
+    padding: 20px 24px 16px;
+    display: flex; align-items: center; gap: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.04);
+    cursor: pointer; user-select: none;
+  }
+  .puzzle-num {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.2em; color: var(--dim);
+    flex-shrink: 0; width: 28px;
+  }
+  .puzzle-type-badge {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.55rem; letter-spacing: 0.25em; text-transform: uppercase;
+    padding: 3px 8px; border: 1px solid; flex-shrink: 0;
+  }
+  .badge-logic   { border-color: rgba(136,102,255,0.4); color: var(--violet2); }
+  .badge-visual  { border-color: rgba(0,221,204,0.4);   color: var(--cyan); }
+
+  .puzzle-difficulty {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.6rem; color: var(--dim); margin-left: auto; flex-shrink: 0;
+  }
+  .diff-easy   { color: var(--lime2); }
+  .diff-medium { color: var(--violet2); }
+  .diff-hard   { color: var(--coral); }
+
+  .puzzle-chevron {
+    font-size: 0.7rem; color: var(--dim); transition: transform 0.3s; flex-shrink: 0;
+  }
+  .puzzle-card.open .puzzle-chevron { transform: rotate(180deg); }
+
+  /* Puzzle body */
+  .puzzle-body { display: none; padding: 0 24px 24px; }
+  .puzzle-card.open .puzzle-body { display: block; }
+
+  .puzzle-question {
+    font-size: 1.05rem; line-height: 1.75; color: var(--text);
+    margin: 20px 0; font-weight: 400;
+  }
+  .puzzle-question strong { color: var(--lime); }
+
+  /* Visual puzzle display */
+  .visual-display {
+    background: var(--surface2); border: 1px solid rgba(255,255,255,0.05);
+    padding: 24px; margin: 16px 0;
+    font-family: 'Syne Mono', monospace;
+    font-size: clamp(0.8rem, 2.5vw, 1.1rem);
+    line-height: 2; color: var(--cyan);
+    text-align: center; letter-spacing: 0.1em;
+    white-space: pre;
+  }
+
+  /* Answer options */
+  .answer-options { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; margin: 20px 0; }
+  .answer-btn {
+    background: var(--surface2); border: 1px solid rgba(255,255,255,0.06);
+    color: var(--text); font-family: 'Syne', sans-serif; font-size: 0.9rem;
+    padding: 12px 16px; cursor: pointer; text-align: left;
+    transition: all 0.2s; line-height: 1.4;
+  }
+  .answer-btn:hover:not(:disabled) { border-color: rgba(200,255,0,0.3); color: var(--lime); }
+  .answer-btn.correct { background: rgba(200,255,0,0.1); border-color: var(--lime); color: var(--lime); }
+  .answer-btn.wrong   { background: rgba(255,85,102,0.1); border-color: var(--coral); color: var(--coral); }
+  .answer-btn:disabled { cursor: default; }
+
+  /* Free answer */
+  .free-answer-wrap { display: flex; gap: 10px; margin: 20px 0; }
+  .free-answer-input {
+    flex: 1; background: var(--surface2); border: 1px solid rgba(255,255,255,0.08);
+    color: var(--text); font-family: 'Syne Mono', monospace; font-size: 0.9rem;
+    padding: 12px 16px; outline: none; transition: border-color 0.2s;
+  }
+  .free-answer-input:focus { border-color: rgba(200,255,0,0.4); }
+  .free-answer-input.correct { border-color: var(--lime); background: rgba(200,255,0,0.05); }
+  .free-answer-input.wrong   { border-color: var(--coral); background: rgba(255,85,102,0.05); }
+  .submit-btn {
+    background: var(--lime); color: var(--bg);
+    font-family: 'Syne', sans-serif; font-weight: 800;
+    font-size: 0.8rem; letter-spacing: 0.1em;
+    padding: 12px 20px; border: none; cursor: pointer;
+    text-transform: uppercase; transition: opacity 0.2s;
+  }
+  .submit-btn:hover { opacity: 0.85; }
+  .submit-btn:disabled { opacity: 0.4; cursor: default; }
+
+  /* Reveal / hint */
+  .hint-row { display: flex; gap: 10px; align-items: center; margin-top: 8px; }
+  .hint-btn {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase;
+    background: transparent; border: 1px solid rgba(136,102,255,0.3);
+    color: var(--violet2); padding: 6px 14px; cursor: pointer; transition: all 0.2s;
+  }
+  .hint-btn:hover { background: rgba(136,102,255,0.1); }
+
+  /* Feedback */
+  .feedback {
+    margin-top: 16px; padding: 14px 16px;
+    font-size: 0.85rem; line-height: 1.7; display: none;
+  }
+  .feedback.show { display: block; }
+  .feedback.correct-fb { background: rgba(200,255,0,0.06); border-left: 3px solid var(--lime); color: var(--lime); }
+  .feedback.wrong-fb   { background: rgba(255,85,102,0.06); border-left: 3px solid var(--coral); color: var(--text); }
+  .feedback .answer-reveal { color: var(--lime); font-weight: 700; }
+
+  /* ── COMPLETION ── */
+  #completion {
+    display: none; text-align: center;
+    padding: 60px 32px; margin-top: 32px;
+    border: 1px solid rgba(200,255,0,0.2);
+    background: rgba(200,255,0,0.03);
+  }
+  #completion.show { display: block; }
+  #completion h2 { font-size: clamp(1.8rem, 5vw, 3rem); font-weight: 800; color: var(--lime); margin-bottom: 16px; letter-spacing: -0.02em; }
+  #completion p { font-size: 0.9rem; color: var(--dim); line-height: 1.8; max-width: 420px; margin: 0 auto 32px; }
+  #completion p strong { color: var(--text); }
+
+  /* ── BOTTOM NAV ── */
+  .bottom-nav {
+    margin-top: 60px; padding-top: 32px; border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 16px;
+  }
+  .bottom-nav a {
+    font-family: 'Syne Mono', monospace;
+    font-size: 0.7rem; letter-spacing: 0.15em; text-transform: uppercase;
+    text-decoration: none; padding: 10px 20px; border: 1px solid; transition: all 0.2s;
+  }
+  .btn-back { border-color: var(--border); color: var(--dim); }
+  .btn-back:hover { color: var(--lime); border-color: rgba(200,255,0,0.3); }
+  .btn-coffee { border-color: rgba(255,85,102,0.35); color: var(--coral); }
+  .btn-coffee:hover { background: var(--coral); color: #fff; }
+
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes popIn  { from { transform: scale(0.95); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+  @media (max-width: 600px) {
+    header { padding: 12px 16px; }
+    .header-right .nav-btn { display: none; }
+    .answer-options { grid-template-columns: 1fr 1fr; }
+    .visual-display { font-size: 0.72rem; padding: 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-left">
+    <div class="header-candy">🍬 freakandie.com — Candy #004</div>
+    <div class="header-title">The Logic Lab</div>
+  </div>
+  <div class="header-right">
+    <a href="index.html" class="nav-btn">← Lab</a>
+    <a href="https://buymeacoffee.com/freakandie" target="_blank" class="coffee-btn">☕ Coffee</a>
+  </div>
+</header>
+
+<div id="score-hud">
+  <div class="hud-label">Solved</div>
+  <div class="hud-score" id="score-display">0</div>
+  <div class="hud-total">of 15</div>
+</div>
+
+<main>
+
+  <div class="hero">
+    <div class="hero-eyebrow">🍬 Candy #004 — Brain Training</div>
+    <h1 class="hero-title">
+      <span class="logic">Logic</span>
+      <span class="lab">Lab.</span>
+    </h1>
+    <p class="hero-sub">15 puzzles. No timers. No pressure. Just you and your brain — <strong>thinking clearly.</strong></p>
+    <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+    <div class="progress-label" id="progress-label">0 / 15 solved</div>
+  </div>
+
+  <div class="filter-tabs">
+    <button class="filter-tab active" onclick="filterPuzzles('all')">All 15</button>
+    <button class="filter-tab" onclick="filterPuzzles('logic')">🧠 Logic & Riddles</button>
+    <button class="filter-tab" onclick="filterPuzzles('visual')">👁 Visual Patterns</button>
+    <button class="filter-tab" onclick="filterPuzzles('unsolved')">Unsolved</button>
+  </div>
+
+  <div id="puzzle-grid"></div>
+
+  <div id="completion">
+    <h2>Lab Complete. 🧪</h2>
+    <p>You solved all 15 puzzles. <strong>Andie is impressed.</strong> Your brain is officially lab-grade. Come back anytime — the puzzles reset when you reload.</p>
+    <a href="https://buymeacoffee.com/freakandie" target="_blank" style="display:inline-flex;align-items:center;gap:10px;border:1px solid rgba(255,85,102,0.4);color:#ff5566;font-family:'Syne Mono',monospace;font-size:0.75rem;letter-spacing:0.15em;padding:12px 24px;text-decoration:none;text-transform:uppercase;transition:all 0.2s" onmouseover="this.style.background='#ff5566';this.style.color='#fff'" onmouseout="this.style.background='transparent';this.style.color='#ff5566'">☕ Buy Andie a coffee</a>
+  </div>
+
+  <div class="bottom-nav">
+    <a href="index.html" class="btn-back">← Back to the lab</a>
+    <a href="https://buymeacoffee.com/freakandie" target="_blank" class="btn-coffee">☕ Buy Andie a coffee</a>
+  </div>
+
+</main>
+
+<script>
+const PUZZLES = [
+  // ── LOGIC & RIDDLES (8) ──
+  {
+    id: 1, type: 'logic', difficulty: 'easy',
+    title: 'The Three Switches',
+    question: 'You are outside a room with the door closed. Inside are three light bulbs, each controlled by one of three switches outside. You can flip the switches as many times as you want, but you can only open the door <strong>once</strong>. How do you figure out which switch controls which bulb?',
+    inputType: 'multiple',
+    options: [
+      'Turn on Switch 1 for a few minutes, turn it off, turn on Switch 2, then open the door — the ON bulb is Switch 2, the warm OFF bulb is Switch 1, the cold OFF bulb is Switch 3',
+      'Turn on all three switches, open the door, and see which bulbs are on',
+      'Turn on Switch 1, open the door, note which bulb is on, close the door, repeat for Switch 2 and 3',
+      'It is impossible to know with only one door opening'
+    ],
+    correctIndex: 0,
+    hint: 'Light bulbs do something other than glow. Think about what else they do when they have been on for a while.',
+    explanation: 'Turn on Switch 1 and leave it on for several minutes. Then turn it OFF and turn Switch 2 ON. Open the door. The bulb that is ON = Switch 2. The bulb that is warm but OFF = Switch 1. The bulb that is cold and OFF = Switch 3. Heat reveals the past state.'
+  },
+  {
+    id: 2, type: 'logic', difficulty: 'easy',
+    title: 'The Farmer\'s Dilemma',
+    question: 'A farmer needs to cross a river with a fox, a chicken, and a bag of grain. His boat can only carry himself and one other thing at a time. If left alone: the fox eats the chicken, and the chicken eats the grain. <strong>How does he get everything across safely?</strong>',
+    inputType: 'multiple',
+    options: [
+      'Take chicken across → return → take fox across → return with chicken → take grain → return → take chicken',
+      'Take grain across → return → take chicken across → return → take fox across → return → take chicken',
+      'Take fox across → return → take chicken across → return → take grain across → return → take chicken',
+      'It is impossible — something always gets eaten'
+    ],
+    correctIndex: 0,
+    explanation: 'The key insight: you can bring something back. Take the chicken over first (the dangerous pairing is fox+chicken and chicken+grain). Then take either the fox or grain, and bring the chicken back. Take the other, leave the chicken, go back for the chicken. Two valid solutions exist.'
+  },
+  {
+    id: 3, type: 'logic', difficulty: 'medium',
+    title: 'The Honest and the Liar',
+    question: 'You are at a fork in the road. One path leads to your destination; the other leads you astray. Two guards stand at the fork — one always tells the truth, one always lies. You don\'t know which is which. You can ask <strong>one question to one guard</strong>. What do you ask to guarantee finding the right path?',
+    inputType: 'multiple',
+    options: [
+      'Ask one guard: "Which path would the OTHER guard tell me to take?" — then take the opposite path',
+      'Ask one guard: "Are you the truth-teller?" — the one who says yes is the honest one',
+      'Ask both guards the same question and take the path they both agree on',
+      'There is no single question that can guarantee the correct path'
+    ],
+    correctIndex: 0,
+    hint: 'Think about what happens when you nest the question inside itself. What does a liar say about what a truth-teller would say?',
+    explanation: 'Ask either guard: "Which path would the OTHER guard tell me to take?" Then take the OPPOSITE path. If you ask the truth-teller, he accurately reports that the liar would say the wrong path. If you ask the liar, he lies about what the truth-teller would say (the right path) — so he also says the wrong path. Either way, you always get the wrong answer, so you take the opposite.'
+  },
+  {
+    id: 4, type: 'logic', difficulty: 'medium',
+    title: 'The Counterfeit Coin',
+    question: 'You have 12 coins. One is counterfeit — it is either lighter or heavier than the others (you don\'t know which). You have a balance scale. <strong>What is the minimum number of weighings needed to guarantee finding the counterfeit coin AND determine if it is heavier or lighter?</strong>',
+    inputType: 'multiple',
+    options: ['2 weighings', '3 weighings', '4 weighings', '5 weighings'],
+    correctIndex: 1,
+    explanation: '3 weighings are sufficient. The trick is strategic grouping: split into three groups of 4. Weigh group 1 vs group 2. If balanced, the fake is in group 3 — use weighings 2 and 3 to isolate it. If unbalanced, you know which side has the fake (heavier or lighter) — subsequent weighings of subgroups pin it down. 3 weighings can distinguish between 24 possible outcomes (12 coins × heavier or lighter).'
+  },
+  {
+    id: 5, type: 'logic', difficulty: 'easy',
+    title: 'The Missing Dollar',
+    question: 'Three friends check into a hotel room that costs $30. They each pay $10. The manager realizes the room is only $25 and sends the bellhop up with $5 change. The bellhop pockets $2 and gives each friend $1 back. So each friend paid $9 — totaling $27. Plus the $2 the bellhop kept = $29. <strong>Where did the missing dollar go?</strong>',
+    inputType: 'multiple',
+    options: [
+      'The dollar never existed — the math is being added incorrectly',
+      'The bellhop took it along with the $2',
+      'The hotel kept it hidden in the price',
+      'The friends\' change was miscounted'
+    ],
+    correctIndex: 0,
+    explanation: 'There is no missing dollar — this is a trick of framing. The friends paid $27 total ($25 for the room + $2 kept by bellhop). Adding $27 + $2 is the error: you should subtract $2 from $27, not add it. The real accounting: $25 (hotel) + $3 (returned) + $2 (bellhop) = $30. Perfect. The puzzle deliberately constructs a nonsensical addition to create an illusion of a paradox.'
+  },
+  {
+    id: 6, type: 'logic', difficulty: 'hard',
+    title: 'The Blue-Eyed Island',
+    question: 'On an island live 100 people with blue eyes and 100 with brown eyes. There are no mirrors; no one knows their own eye color. A rule: if you ever figure out your own eye color, you must leave the island at midnight. One day, a visitor says: <strong>"I can see at least one person with blue eyes."</strong> Everyone already knew this. What happens?',
+    inputType: 'multiple',
+    options: [
+      'Nothing happens — the visitor said nothing new',
+      'All 100 blue-eyed people leave on the 100th night',
+      'The visitor must leave immediately for breaking the rule',
+      'All 200 people leave on the 100th night'
+    ],
+    correctIndex: 1,
+    explanation: 'All 100 blue-eyed people leave on night 100. The visitor created "common knowledge" — everyone now knows that everyone knows that everyone can see blue eyes. Before, a blue-eyed person could think: "Maybe I have brown eyes, and that person is the only blue-eyed one." The statement makes everyone\'s reasoning chain synchronize. By induction: if there were 1 blue-eyed person, they\'d leave night 1. If 2, each would see the other not leave on night 1 and realize they must also have blue eyes — leaving night 2. At 100 people, all 100 leave on night 100.'
+  },
+  {
+    id: 7, type: 'logic', difficulty: 'medium',
+    title: 'The Rope Bridge',
+    question: 'Four people need to cross a rope bridge at night. The bridge holds only 2 people. They have one torch and must use it to cross. Crossing times: Alex: 1 min, Blake: 2 min, Casey: 5 min, Drew: 10 min. When two cross, they move at the slower person\'s pace. <strong>What is the minimum time for all four to cross?</strong>',
+    inputType: 'multiple',
+    options: ['15 minutes', '17 minutes', '19 minutes', '21 minutes'],
+    correctIndex: 1,
+    explanation: '17 minutes. The trick: the two slowest should cross together. Step 1: Alex + Blake cross (2 min). Step 2: Alex returns with torch (1 min). Step 3: Casey + Drew cross (10 min). Step 4: Blake returns with torch (2 min). Step 5: Alex + Blake cross (2 min). Total: 2+1+10+2+2 = 17. The naive approach of always sending the fastest back costs more: 1+1+10+1+5 = 18 minutes or worse.'
+  },
+  {
+    id: 8, type: 'logic', difficulty: 'hard',
+    title: 'The Unexpected Hanging',
+    question: 'A judge tells a condemned prisoner: "You will be hanged at noon on one day next week — Monday through Friday. It will be a surprise; you will not know the day until the executioner arrives." The prisoner reasons: "It can\'t be Friday — I\'d know by Thursday evening. So ruling out Friday, it can\'t be Thursday — I\'d know by Wednesday. By this logic, no day works. I cannot be hanged!" <strong>What is the flaw in the prisoner\'s logic?</strong>',
+    inputType: 'multiple',
+    options: [
+      'The prisoner\'s logic is perfectly valid — the judge\'s statement is truly impossible to fulfill',
+      'The prisoner assumes the judge\'s statement is entirely true, but surprise and inevitability cannot coexist perfectly — the reasoning eliminates the very uncertainty it relies on',
+      'The prisoner forgot that weekends could be included',
+      'The judge can simply change the day after the prisoner makes his deduction'
+    ],
+    correctIndex: 1,
+    explanation: 'This is the "Surprise Examination Paradox" — one of philosophy\'s most debated puzzles. The prisoner\'s backward induction seems valid but is self-defeating: to rule out Friday, he must assume he will definitely survive to Thursday night — but that assumption itself uses knowledge he claims he won\'t have. The paradox reveals that "you will be surprised" is a statement that cannot be fully formalized in simple logic. The prisoner can still be hanged on Wednesday, completely surprised.'
+  },
+
+  // ── VISUAL PATTERNS (7) ──
+  {
+    id: 9, type: 'visual', difficulty: 'easy',
+    title: 'What Comes Next?',
+    question: 'Study the pattern carefully. What symbol replaces the question mark?',
+    visual: `  ★  ★★  ★★★  ★★★★  ?`,
+    inputType: 'multiple',
+    options: ['★★★★★', '★★★★★★', '★★★', '★★★★★★★'],
+    correctIndex: 0,
+    explanation: 'Each step adds one star. 1, 2, 3, 4 → the next is 5 stars.'
+  },
+  {
+    id: 10, type: 'visual', difficulty: 'easy',
+    title: 'The Number Grid',
+    question: 'Find the rule in this grid and determine the missing number.',
+    visual: `  2   4   8
+  3   9   27
+  4  16   ?`,
+    inputType: 'multiple',
+    options: ['48', '64', '32', '256'],
+    correctIndex: 1,
+    explanation: 'Each row: column 1 is the base number (n). Column 2 is n². Column 3 is n³. Row 3: base is 4. 4² = 16. 4³ = 64.'
+  },
+  {
+    id: 11, type: 'visual', difficulty: 'medium',
+    title: 'Letter Logic',
+    question: 'What letter comes next in this sequence?',
+    visual: `  A  Z  B  Y  C  X  D  ?`,
+    inputType: 'multiple',
+    options: ['E', 'W', 'V', 'U'],
+    correctIndex: 1,
+    explanation: 'Two alternating sequences: forward alphabet (A, B, C, D...) and backward alphabet (Z, Y, X, W...). They alternate. After D in the forward sequence, the backward sequence continues with W.'
+  },
+  {
+    id: 12, type: 'visual', difficulty: 'medium',
+    title: 'The Odd Shape Out',
+    question: 'One of these groups does not follow the same rule as the others. Which is the odd one out?',
+    visual: `  Group A:  ○ ○ ○   (3 circles)
+  Group B:  □ □ □   (3 squares)
+  Group C:  △ △ △   (3 triangles)
+  Group D:  ○ □ △   (1 each)
+  Group E:  ○ ○ □   (2 circles, 1 square)`,
+    inputType: 'multiple',
+    options: ['Group A', 'Group B', 'Group D', 'Group E'],
+    correctIndex: 3,
+    explanation: 'Groups A, B, C, and D each follow a clear internal rule: A is all circles, B is all squares, C is all triangles, D has exactly one of each shape. Group E is the odd one out — it has 2 circles and 1 square, which follows no consistent rule that connects it to the others.'
+  },
+  {
+    id: 13, type: 'visual', difficulty: 'medium',
+    title: 'The Missing Number',
+    question: 'Find the pattern and fill in the missing number.',
+    visual: `   [ 6  ]  [ 11 ]  [ 18 ]
+   [ 27 ]  [ 38 ]  [  ? ]`,
+    inputType: 'multiple',
+    options: ['48', '51', '52', '50'],
+    correctIndex: 1,
+    explanation: 'The differences between consecutive numbers: 5, 7, 9, 11, 13. Each difference increases by 2 (odd numbers). 38 + 13 = 51.'
+  },
+  {
+    id: 14, type: 'visual', difficulty: 'hard',
+    title: 'The Symbol Matrix',
+    question: 'Each row and column follows a consistent rule. What symbol belongs in the empty cell?',
+    visual: `  ★  ●  ■
+  ●  ■  ★
+  ■  ★  ?`,
+    inputType: 'multiple',
+    options: ['★', '●', '■', '○'],
+    correctIndex: 1,
+    explanation: 'This is a Latin square — each row and each column contains each symbol exactly once (★, ●, ■). Row 3 already has ■ and ★, so the missing symbol is ●. Column 3 already has ■ and ★, confirming ● is correct.'
+  },
+  {
+    id: 15, type: 'visual', difficulty: 'hard',
+    title: 'The Clock Puzzle',
+    question: 'A clock loses 15 minutes every hour. It is set correctly at 6:00 AM. <strong>When the clock shows 6:00 PM (12 hours later), what is the actual time?</strong>',
+    inputType: 'multiple',
+    options: ['8:00 PM', '10:00 PM', '9:36 PM', '7:30 PM'],
+    correctIndex: 0,
+    explanation: 'The clock runs at 45/60 = 3/4 speed. When 12 clock-hours pass, real time elapsed = 12 ÷ (3/4) = 16 real hours. 6:00 AM + 16 hours = 10:00 PM. Wait — let\'s recheck: the clock shows 12 hours have passed, but at 3/4 speed means real time = 12 × (4/3) = 16 hours. 6 AM + 16 hours = 10 PM. Answer: 10:00 PM.'
+  }
+];
+
+// Fix puzzle 15 correct answer
+PUZZLES[14].correctIndex = 1;
+PUZZLES[14].explanation = 'The clock runs at 45/60 = 3/4 of real speed. For every 45 real minutes, the clock shows 60 minutes passing. So when the clock shows 12 hours have passed, real elapsed time = 12 × (60/45) = 12 × (4/3) = 16 real hours. 6:00 AM + 16 hours = 10:00 PM.';
+
+let solved = new Set();
+let currentFilter = 'all';
+
+function filterPuzzles(filter) {
+  currentFilter = filter;
+  document.querySelectorAll('.filter-tab').forEach(t => t.classList.remove('active'));
+  event.target.classList.add('active');
+  renderGrid();
+}
+
+function renderGrid() {
+  let puzzles = PUZZLES;
+  if (currentFilter === 'logic')   puzzles = PUZZLES.filter(p => p.type === 'logic');
+  if (currentFilter === 'visual')  puzzles = PUZZLES.filter(p => p.type === 'visual');
+  if (currentFilter === 'unsolved') puzzles = PUZZLES.filter(p => !solved.has(p.id));
+
+  const grid = document.getElementById('puzzle-grid');
+  grid.innerHTML = puzzles.map(p => renderPuzzle(p)).join('');
+}
+
+function renderPuzzle(p) {
+  const typeClass = p.type === 'logic' ? 'badge-logic' : 'badge-visual';
+  const typeLabel = p.type === 'logic' ? '🧠 Logic' : '👁 Visual';
+  const diffClass = `diff-${p.difficulty}`;
+  const isSolved  = solved.has(p.id);
+
+  let inputHTML = '';
+  if (p.inputType === 'multiple') {
+    inputHTML = `<div class="answer-options">
+      ${p.options.map((opt, i) => `
+        <button class="answer-btn" onclick="checkMultiple(${p.id}, ${i})" id="opt-${p.id}-${i}">${opt}</button>
+      `).join('')}
+    </div>`;
+  } else {
+    inputHTML = `<div class="free-answer-wrap">
+      <input type="text" class="free-answer-input" id="free-${p.id}" placeholder="Type your answer..." onkeydown="if(event.key==='Enter') checkFree(${p.id})">
+      <button class="submit-btn" onclick="checkFree(${p.id})">Check</button>
+    </div>`;
+  }
+
+  return `
+    <div class="puzzle-card ${isSolved ? 'solved' : ''}" id="card-${p.id}">
+      <div class="puzzle-header" onclick="toggleCard(${p.id})">
+        <div class="puzzle-num">#${String(p.id).padStart(2,'0')}</div>
+        <div class="puzzle-type-badge ${typeClass}">${typeLabel}</div>
+        <div style="flex:1;font-size:0.95rem;font-weight:700;color:var(--text);padding-left:4px">${p.title}</div>
+        <div class="puzzle-difficulty ${diffClass}">${p.difficulty}</div>
+        <div class="puzzle-chevron">▼</div>
+      </div>
+      <div class="puzzle-body" id="body-${p.id}">
+        <div class="puzzle-question">${p.question}</div>
+        ${p.visual ? `<div class="visual-display">${p.visual}</div>` : ''}
+        ${isSolved ? '' : inputHTML}
+        ${!isSolved ? `<div class="hint-row">
+          <button class="hint-btn" onclick="showHint(${p.id})">💡 Hint</button>
+          <span id="hint-${p.id}" style="font-size:0.78rem;color:var(--violet2);display:none;font-style:italic"></span>
+        </div>` : ''}
+        <div class="feedback" id="feedback-${p.id}"></div>
+      </div>
+    </div>`;
+}
+
+function toggleCard(id) {
+  const card = document.getElementById(`card-${id}`);
+  card.classList.toggle('open');
+}
+
+function showHint(id) {
+  const p = PUZZLES.find(x => x.id === id);
+  if (!p || !p.hint) return;
+  const el = document.getElementById(`hint-${id}`);
+  el.textContent = p.hint;
+  el.style.display = 'inline';
+}
+
+function checkMultiple(puzzleId, selectedIndex) {
+  const p = PUZZLES.find(x => x.id === puzzleId);
+  if (!p || solved.has(puzzleId)) return;
+
+  const correct = selectedIndex === p.correctIndex;
+  const btns = document.querySelectorAll(`[id^="opt-${puzzleId}-"]`);
+  btns.forEach(b => b.disabled = true);
+
+  document.getElementById(`opt-${puzzleId}-${selectedIndex}`).classList.add(correct ? 'correct' : 'wrong');
+  if (!correct) document.getElementById(`opt-${puzzleId}-${p.correctIndex}`).classList.add('correct');
+
+  showFeedback(puzzleId, correct, p.explanation);
+  if (correct) markSolved(puzzleId);
+}
+
+function checkFree(puzzleId) {
+  const p = PUZZLES.find(x => x.id === puzzleId);
+  if (!p || solved.has(puzzleId)) return;
+
+  const input = document.getElementById(`free-${puzzleId}`);
+  const val = input.value.trim().toLowerCase();
+  if (!val) return;
+
+  const correct = p.answer.some(a => val.includes(a.split(' ').slice(0,3).join(' ')) || a.includes(val.split(' ').slice(0,3).join(' ')));
+
+  input.classList.add(correct ? 'correct' : 'wrong');
+  input.disabled = true;
+  document.querySelector(`#card-${puzzleId} .submit-btn`).disabled = true;
+
+  showFeedback(puzzleId, correct, p.explanation, correct ? null : p.answer[0]);
+  if (correct) markSolved(puzzleId);
+}
+
+function showFeedback(puzzleId, correct, explanation, revealAnswer) {
+  const fb = document.getElementById(`feedback-${puzzleId}`);
+  fb.className = `feedback show ${correct ? 'correct-fb' : 'wrong-fb'}`;
+  if (correct) {
+    fb.innerHTML = `✓ Correct! ${explanation}`;
+  } else {
+    fb.innerHTML = `Not quite. ${explanation}`;
+  }
+}
+
+function markSolved(puzzleId) {
+  solved.add(puzzleId);
+  document.getElementById(`card-${puzzleId}`).classList.add('solved');
+  updateScore();
+}
+
+function updateScore() {
+  const count = solved.size;
+  document.getElementById('score-display').textContent = count;
+  document.getElementById('progress-fill').style.width = (count / 15 * 100) + '%';
+  document.getElementById('progress-label').textContent = `${count} / 15 solved`;
+  if (count === 15) {
+    document.getElementById('completion').classList.add('show');
+    document.getElementById('completion').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+// Init
+renderGrid();
+</script>
+</body>
+</html>
