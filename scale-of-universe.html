@@ -427,12 +427,28 @@
     margin-top: 2px;
   }
 
+  @media (max-width: 768px) {
+    body { font-size: 16px; }
+    .scale-tag { font-size: 0.75rem; }
+    .scale-size { font-size: 2.2rem; }
+    .scale-name { font-size: 1.2rem; }
+    .scale-desc { font-size: 0.92rem; line-height: 2; }
+    .scale-fact { font-size: 0.88rem; }
+    #intro h2 { font-size: clamp(2.2rem, 10vw, 4rem); }
+    #intro p { font-size: 0.95rem; line-height: 2; }
+    #outro h2 { font-size: clamp(1.4rem, 6vw, 2rem); }
+    #outro p { font-size: 0.92rem; line-height: 2; }
+    .outro-btn { font-size: 0.82rem; padding: 12px 18px; }
+    #current-size-hud .hud-value { font-size: 1.1rem; }
+    #current-size-hud .hud-name { font-size: 0.72rem; }
+    header h1 { font-size: 0.72rem; letter-spacing: 0.2em; }
+  }
   @media (max-width: 700px) {
-    .scale-section { padding: 80px 24px 80px 24px; justify-content: center; }
+    .scale-section { padding: 80px 20px; justify-content: center; }
     .object-visual { display: none; }
     #scale-bar { display: none; }
     #scale-label { display: none; }
-    header h1 { font-size: 0.65rem; }
+    #current-size-hud { bottom: 16px; right: 16px; }
   }
 </style>
 </head>

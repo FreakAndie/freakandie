@@ -331,11 +331,42 @@
   }
 
   /* ── RESPONSIVE ── */
+  @media (max-width: 768px) {
+    body { font-size: 16px; }
+    .intro-eyebrow { font-size: 0.75rem; }
+    .intro-premise { font-size: 1rem; line-height: 2; }
+    .intro-sub { font-size: 0.9rem; line-height: 2; }
+    .month-real-time { font-size: 0.82rem; }
+    .event-cal-date { font-size: 1.1rem; }
+    .event-cal-time { font-size: 0.7rem; }
+    .event-era { font-size: 0.68rem; }
+    .event-title { font-size: 1.2rem; }
+    .event-real { font-size: 0.78rem; }
+    .event-desc { font-size: 0.92rem; line-height: 2; }
+    .event-wow { font-size: 0.88rem; }
+    .final-title { font-size: 1.6rem; }
+    .second-time { font-size: 0.68rem; }
+    .second-event { font-size: 1.1rem; }
+    .second-real { font-size: 0.75rem; }
+    .second-desc { font-size: 0.88rem; line-height: 1.8; }
+    .december-note { font-size: 0.92rem; line-height: 1.9; }
+    #outro h2 { font-size: clamp(1.4rem, 5vw, 2.2rem); }
+    #outro p { font-size: 0.92rem; line-height: 2; }
+    .outro-btn { font-size: 0.78rem; padding: 10px 16px; }
+    #date-hud .hud-date { font-size: 1rem; }
+    #date-hud .hud-real { font-size: 0.68rem; }
+  }
   @media (max-width: 600px) {
     .month-section { margin-left: 48px; }
     .month-spine { display: none; }
     .event { grid-template-columns: 64px 1fr; gap: 0 12px; }
     .header-right .home-link { display: none; }
+    .events-list { padding: 16px 16px; }
+    .month-header { padding: 16px 0 16px 16px; }
+    .final-section { padding: 32px 16px; }
+    .seconds-grid { grid-template-columns: 1fr; }
+    #outro { padding: 40px 16px; }
+    .outro-links { flex-direction: column; align-items: center; }
   }
 </style>
 </head>
