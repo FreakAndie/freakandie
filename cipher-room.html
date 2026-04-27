@@ -131,14 +131,16 @@
   /* Clue popup */
   .clue-popup {
     position: fixed; inset: 0; z-index: 300;
-    display: none; align-items: center; justify-content: center;
-    background: rgba(0,0,0,0.85); padding: 20px;
+    display: none; align-items: flex-start; justify-content: center;
+    background: rgba(0,0,0,0.85); padding: 80px 20px 40px;
+    overflow-y: auto;
   }
   .clue-popup.show { display: flex; }
   .clue-popup-inner {
     background: #111; border: 1px solid #333;
     max-width: 520px; width: 100%; padding: 32px;
     position: relative; animation: popIn 0.3s ease;
+    flex-shrink: 0;
   }
   @keyframes popIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
@@ -963,11 +965,16 @@ function openClue(room, idx) {
     updateTracker(room, idx);
   }
 
-  document.getElementById('clue-popup').classList.add('show');
+  // Lock background scroll
+  document.body.style.overflow = 'hidden';
+  const popup = document.getElementById('clue-popup');
+  popup.classList.add('show');
+  popup.scrollTop = 0;
 }
 
 function closePopup() {
   document.getElementById('clue-popup').classList.remove('show');
+  document.body.style.overflow = '';
 }
 
 // Close popup on backdrop click
