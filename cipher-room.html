@@ -376,7 +376,7 @@
 
 <!-- ══════════════════════════════════════
      ROOM 01: ANDIE'S LAB
-     Final code: CATALYST
+     Final code: ????????
      Clues: 8 hidden objects, each reveals a cipher fragment
 ══════════════════════════════════════ -->
 <div id="room-lab" class="screen room-screen lab-theme">
@@ -484,7 +484,7 @@
 
 <!-- ══════════════════════════════════════
      ROOM 02: ANCIENT LIBRARY
-     Final code: OMICRON
+     Final code: ???????
 ══════════════════════════════════════ -->
 <div id="room-lib" class="screen room-screen lib-theme">
   <div class="room-layout">
@@ -548,7 +548,7 @@
 
 <!-- ══════════════════════════════════════
      ROOM 03: SPACE STATION
-     Final code: PULSAR
+     Final code: ??????
 ══════════════════════════════════════ -->
 <div id="room-space" class="screen room-screen space-theme">
   <div class="room-layout">
@@ -609,7 +609,7 @@
 
 <!-- ══════════════════════════════════════
      ROOM 04: HAUNTED MANSION
-     Final code: WRAITH
+     Final code: ??????
 ══════════════════════════════════════ -->
 <div id="room-haunt" class="screen room-screen haunt-theme">
   <div class="room-layout">
@@ -680,151 +680,55 @@ const ROOMS = {
       {
         name: 'Periodic Table',
         title: 'The Periodic Table — Clue #1',
-        display: `Element 6 is C.\nElement 1 is H.\n\nBut what is Element 79 hiding?\n\nAtomic number 79.\nSymbol: Au\nLetter revealed: C\n\nNote: The SYMBOL gives\nyou nothing. Count the\nletters in the element\nNAME. Take the Nth letter\nwhere N = atomic number mod 5.\n\n79 mod 5 = 4\nGOLD → letter 4 = D\n\nWait. Recount.\nG-O-L-D\n1-2-3-4\n\nLetter #4 = D\n\nYour first letter: C\n(The formula tells you\nwhich element — see\nthe chalkboard.)`,
+        display: `PERIODIC TABLE LOG\n\nThe chalkboard formula\npoints to one element.\nFind it. Then apply:\n\nTake the element name.\nCount its letters.\nAtomic number mod 5 = N.\nTake the Nth letter\nof the element name.\n\nThat letter is your answer.\n\n(Find the element on\nthe chalkboard first.)`,
         hint: 'The chalkboard has the formula that tells you which element to look up. Find the element, count its name letters, use the modular arithmetic shown.'
       },
       {
         name: 'Flask A',
         title: 'Flask A — Clue #2',
-        display: `EXPERIMENT LOG #447\n\nReaction produces:\n█ █ █ █ █ █ █ █ █\n\nBubble sequence observed:\n3 - 1 - 21 - 1 - 12 - 25 - 19 - 20\n\nDecoder note:\nA=1, B=2, C=3...\nStandard A1Z26.\n\nConvert the sequence.\nThe 2nd converted letter\nis your answer.\n\n3=C, 1=A, 21=U...\n\nYour letter: A`,
+        display: `EXPERIMENT LOG #447\n\nBubble sequence observed\nduring reaction:\n\n3 - 1 - 21 - 1 - 12 - 25 - 19 - 20\n\nCipher: A1Z26\n(A=1, B=2, C=3 ... Z=26)\n\nConvert each number\nto its letter.\n\nYour answer is the\n2nd letter in the\ndecoded sequence.`,
         hint: 'A1Z26 cipher. A=1, B=2, C=3... Z=26. Convert each number to its letter. You want the second letter in the sequence.'
       },
       {
         name: 'Microscope',
         title: 'Microscope Slide — Clue #3',
-        display: `SLIDE LABEL:\n\n"The middle letter of\nthe longest word in\nthis sentence."\n\nCount carefully.\n\nT-H-E = 3\nM-I-D-D-L-E = 6\nL-E-T-T-E-R = 6\nO-F = 2\nT-H-E = 3\nL-O-N-G-E-S-T = 7 ←\nW-O-R-D = 4\nI-N = 2\nT-H-I-S = 4\nS-E-N-T-E-N-C-E = 8 ←\n\nTwo words tie at 8?\nNo — SENTENCE = 8\nLONGEST = 7\n\nMiddle of SENTENCE:\nS-E-N-T-E-N-C-E\n1-2-3-4-5-6-7-8\nMiddle = positions 4&5\nTake the first: T\n\nYour letter: T`,
+        display: `SLIDE LABEL:\n\n"The middle letter of\nthe longest word in\nthis sentence."\n\nFind the longest word.\nCount carefully —\nevery word matters.\n\nIf the word has an\neven number of letters,\ntake the left-of-center\nletter.\n\nThat letter is your answer.`,
         hint: 'Find the longest word in the text on the slide label. Take its middle letter. If it is even-length, take the left-of-center letter.'
       },
       {
         name: 'Chalkboard',
         title: 'The Chalkboard — ORDER MAP',
-        display: `FORMULA FOR THE CODE:\n\n████████████████████\n\nCATALYST\n\nNO — that is too easy.\nThis chalkboard shows\nthe ORDER of letters:\n\nSlot 1 → Periodic Table\nSlot 2 → Flask A\nSlot 3 → Microscope\nSlot 4 → Chalkboard*\nSlot 5 → Petri Dish\nSlot 6 → Lab Notebook\nSlot 7 → Terminal\nSlot 8 → Safe\n\n*This slot: count the\nnumber of chemical\nformulas written on\nthis board. That count\nis your letter position\nin the alphabet.\n\n(4 formulas = D? No.)\nCount again. There are\nexactly 1 formulas\nvisible here.\n1 = A\n\nYour letter: A`,
+        display: `THE ORDER OF ALL CLUES:\n\nSlot 1 → Periodic Table\nSlot 2 → Flask A\nSlot 3 → Microscope\nSlot 4 → Chalkboard ★\nSlot 5 → Petri Dish\nSlot 6 → Lab Notebook\nSlot 7 → Terminal\nSlot 8 → Safe\n\n★ This slot (Chalkboard):\nCount the number of\nchemical formulas\nvisible on this board.\n\nThat count = your letter\nposition in the alphabet.\n\n(A=1, B=2, C=3...)`,
         hint: 'The chalkboard serves two purposes: it shows the ORDER of all clues, and it contains its own letter. Count the visible chemical formulas on the board itself.'
       },
       {
         name: 'Petri Dish',
         title: 'Petri Dish — Clue #5',
-        display: `GROWTH PATTERN LOG:\n\nThe bacteria spell\nsomething in Morse:\n\n─ ·\n\n─ = T\n· = E\n\nTE? No — the culture\nkeeps growing...\n\n─ · ─ · ─ · ─\n\nLet's decode properly:\n─ · ─ · = cipher key\n\nActually: read the\npattern as semaphore.\nThe dish is tilted at\nexactly 12 o'clock.\n\nSemaphore for L:\nLeft arm up, right down.\n\nYour letter: L`,
+        display: `GROWTH PATTERN LOG:\n\nThe bacteria colony\nhas grown into a\nrecognizable shape.\n\nThe pattern matches\na flag semaphore\narm position:\n\n    ↑\n    |\n    o\n   /\n  ↙\n\nLeft arm: UP\nRight arm: LOWER-LEFT\n\nLook up this position\nin the semaphore\nalphabet to find\nyour letter.`,
         hint: 'The petri dish growth pattern mimics a semaphore position. Match the arm positions shown in the growth pattern to the semaphore alphabet.'
       },
       {
         name: 'Lab Notebook',
         title: 'Lab Notebook — Clue #6',
-        display: `PAGE 23 — ENCRYPTED\n\nAndie's private cipher:\nReplace each letter with\nthe one 13 positions\nahead (ROT13).\n\nEncrypted entry reads:\n"Gur frperg vf L"\n\nDecrypt it:\nG→T, u→h, r→e...\n"The secret is Y"\n\nBut wait — ROT13 again:\nY → L\n\nHmm. Apply ROT13 twice?\nThat returns the original.\n\nSo ROT13 of "Y" = L\n\nNo — the CLUE says the\nletter is Y. Take it.\nThen apply the notebook\nrule (rotate back 13).\n\nY rotated back 13 = L\n\nYour letter: Y`,
-        hint: 'The notebook uses ROT13. Decode the encrypted entry to find the letter. Remember: ROT13 applied twice returns the original, so applying it once to the revealed letter gives you the true answer.'
-      },
-      {
-        name: 'Terminal',
-        title: 'Lab Terminal — Clue #7',
-        display: `> SYSTEM ACCESS: GRANTED\n> USER: ANDIE\n> DATE: CLASSIFIED\n\n> run cipher_decode.exe\n\nINPUT: 01010011\nMODE: ASCII BINARY\n\n01010011 in decimal:\n= 64+16+2+1 = 83\n\nASCII 83 = S\n\n> OUTPUT: S\n\n> Also flagged in log:\n> Binary string hidden\n> in boot sequence:\n> 01010011\n\n> Cross-reference with\n> element database...\n\n> LETTER CONFIRMED: S\n\nYour letter: S`,
-        hint: 'Convert the 8-bit binary number to decimal, then look up the ASCII character table to find which letter that decimal value represents.'
-      },
-      {
-        name: 'Safe',
-        title: 'The Safe — Clue #8',
-        display: `COMBINATION LOCK:\n\n3 numbers are engraved:\n20 · 8 · 5\n\nA1Z26 again:\n20 = T\n8 = H\n5 = E\n\nSpells: THE\n\nBut a note taped to\nthe safe reads:\n"Take only what you\nneed. First letter only."\n\nFirst letter of THE: T\n\nYour final letter: T\n\nNow arrange all 8 letters\nin the order shown on\nthe CHALKBOARD:\n\nSlots: C A T A L Y S T\n\nThe code is CATALYST.`,
-        hint: 'The combination numbers use A1Z26. Convert them to letters to spell a word. Then follow the instruction on the note taped to the safe.'
-      }
-    ],
-    hints: [
-      'Start with the Chalkboard — it is not just a clue, it is a MAP. It tells you the order of all 8 clues and which slot each object fills.',
-      'Each object uses a DIFFERENT cipher method: A1Z26, binary ASCII, ROT13, semaphore, modular arithmetic, Morse code. Identify which method each object uses before trying to decode.',
-      'The final answer is a chemistry word meaning a substance that speeds up a reaction. 8 letters. Your letters in slot order are: C-A-T-A-L-Y-S-T.'
-    ],
-    trackerLabels: ['Periodic Table', 'Flask A', 'Microscope', 'Chalkboard', 'Petri Dish', 'Lab Notebook', 'Terminal', 'Safe']
-  },
-
-  lib: {
-    answer: 'OMICRON',
-    clues: [
-      {
-        name: 'Scroll I',
-        title: 'Scroll I — The Atbash Cipher',
-        display: `Ancient text reads:\n\n"Gsv kilksvg hzbh gsv\nulibwwvm dliu rh...\nLnrxilm"\n\nAtbash Cipher:\nA↔Z, B↔Y, C↔X...\nReverse the alphabet.\n\nL→O, n→m, r→i...\n"The prophet says the\nforbidden word is...\nOmicron"\n\nVerify: Atbash each\nletter of LNRXILM:\nL=12 → Z-12+1=O\nN=14 → Z-14+1=M\nR=18 → Z-18+1=I\nX=24 → Z-24+1=C\nI=9  → Z-9+1=R\nL=12 → Z-12+1=O\nM=13 → Z-13+1=N\n\n= O M I C R O N ✓\n\nFirst letter: O\n\nYour letter: O`,
-        hint: 'Atbash cipher: reverse the alphabet. A becomes Z, B becomes Y, and so on. Decode the scroll to find the first letter of the hidden word.'
-      },
-      {
-        name: 'Ancient Urn',
-        title: 'Ancient Urn — Clue #2',
-        display: `Painted around the urn:\n\n╔═══ GREEK NUMERALS ═══╗\n║                      ║\n║  ΙΓ = 13             ║\n║  The 13th letter of  ║\n║  the Greek alphabet  ║\n║  is your answer.     ║\n║                      ║\n║  Greek alphabet:     ║\n║  Α Β Γ Δ Ε Ζ Η Θ    ║\n║  1 2 3 4 5 6 7 8     ║\n║  Ι Κ Λ Μ Ν Ξ Ο Π   ║\n║  9 10 11 12 13 14 15 ║\n║                      ║\n║  13th letter: Ν (Nu) ║\n║  English: M          ║\n╚══════════════════════╝\n\nYour letter: M`,
-        hint: 'Count through the Greek alphabet to position 13. Translate that Greek letter to its English equivalent letter.'
-      },
-      {
-        name: 'Brass Key',
-        title: 'The Brass Key — Clue #3',
-        display: `Engraved on the key:\n\n"I am the letter that\nappears most often in\nthe word ILLUMINATE."\n\nCount carefully:\n\nI-L-L-U-M-I-N-A-T-E\n\nI: appears at pos 1,6 → 2 times\nL: appears at pos 2,3 → 2 times\nU: appears at pos 4 → 1 time\nM: appears at pos 5 → 1 time\nN: appears at pos 7 → 1 time\nA: appears at pos 8 → 1 time\nT: appears at pos 9 → 1 time\nE: appears at pos 10 → 1 time\n\nTie between I and L.\nKey has a tiebreaker:\n"When tied, take the\none that comes first\nin the word."\n\nFirst occurrence: I (pos 1)\n\nYour letter: I`,
-        hint: 'Count letter frequencies in the word ILLUMINATE. Find the most common. If there is a tie, the engraving tells you how to break it.'
-      },
-      {
-        name: 'Candelabra',
-        title: 'The Candelabra — Clue #4',
-        display: `The candelabra holds\n5 candles total.\n\nCount how many are\nSTILL LIT:\n\n█ █ █ ░ ░\n(█=lit, ░=burned out)\n\n3 candles still lit.\n2 burned out.\n\nThe cipher rule\nengraved on the base:\n\n"Count the living flames.\nThat number is your\nposition in the alphabet."\n\n3 lit flames = 3rd letter\n\nA=1, B=2, C=3\n\nYour letter: C`,
-        hint: 'Count specifically the candles that have burned out (not lit). That count gives you a number. That number corresponds to a letter position in the alphabet.'
-      },
-      {
-        name: 'Codex',
-        title: 'The Codex — ORDER & Clue #5',
-        display: `CODEX PAGE — THE ORDER:\n\nSlot 1 → Scroll I\nSlot 2 → Ancient Urn\nSlot 3 → Brass Key\nSlot 4 → Candelabra\nSlot 5 → Codex*\nSlot 6 → Stone Tablet\nSlot 7 → Scales\n\n*This slot: The Codex\ncontains a Caesar cipher.\nShift = 18 BACKWARD.\n\nEncrypted letter: J\n\nTo decode: shift J\nbackward by 18 positions.\n\nJ is the 10th letter.\n10 - 18 = -8\nWrap around: -8 + 26 = 18\n18th letter = R\n\nVerify by encoding:\nR(18) + 18 = 36\n36 mod 26 = 10 = J ✓\n\nSo J decoded = R\n\nYour letter: R`,
-        hint: 'The Codex uses a Caesar cipher with shift 18. The encrypted letter is shown. Shift it backwards by 18 positions in the alphabet, wrapping around if needed.'
-      },
-      {
-        name: 'Stone Tablet',
-        title: 'Stone Tablet — Clue #6',
-        display: `CARVED INTO THE STONE:\n\n⚡ Φ ⚡\n\n"Seek the 15th."\n\nA numerical riddle:\n15th letter of the\nEnglish alphabet.\n\nA B C D E F G H I J\n1 2 3 4 5 6 7 8 9 10\n\nK  L  M  N  O\n11 12 13 14 15\n\n15 = O\n\nBut the tablet has a\nsecond inscription:\n"Not the English.\nThe Greek. 15th."\n\nGreek 15th letter:\nΑ Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο\n1  2 3 4  5 6 7  8 9 10 11 12 13 14 15\n\n15th Greek = Ο (Omicron)\nEnglish equivalent: O\n\nYour letter: O`,
-        hint: 'The tablet says "seek the 15th" but specifies the Greek alphabet, not English. Find the 15th letter of the Greek alphabet and translate it to its English letter equivalent.'
-      },
-      {
-        name: 'Scales',
-        title: 'The Scales — Clue #7',
-        display: `On the scales:\n\nLeft pan:  Α + Ν = 1+13 = 14\nRight pan: Ο + Ν = 14+13 = 28?\n\nNo — the scales BALANCE.\nWhat letter X makes\nboth pans equal?\n\nLeft pan coins: 14\nRight pan coins: 13\n\nA scale that balances\nwhen you add the\nNth letter:\n\n14 + N = 13 + N + 1?\n\nSimpler: The scales\nshow the letter N\n(14th in alphabet)\non one side. The other\nside shows 13 coins.\n\n14 coins vs 13 coins.\nDifference = 1 = A?\n\nOr: the missing weight\nthat balances them is\nthe 14th letter: N\n\nYour letter: N\n\n(Combine all 7:\nO M I C R O N)`,
-        hint: 'The scales show two quantities that do not balance. Find what letter position (A=1, Z=26) would need to be added to make them equal. That letter is your answer.'
-      }
-    ],
-    hints: [
-      'The Codex is your ORDER MAP — find it first. It tells you which slot each object fills, just like the Chalkboard in the Lab.',
-      'Each cipher in this room comes from antiquity: Atbash (reversed alphabet), Caesar shift, Greek numerals, letter frequency, and positional counting. Identify the cipher type before decoding.',
-      'The final word is a letter of the Greek alphabet — one that has recently become well-known worldwide. 7 letters. O-M-I-C-R-O-N.'
-    ],
-    trackerLabels: ['Scroll I', 'Ancient Urn', 'Brass Key', 'Candelabra', 'Codex', 'Stone Tablet', 'Scales']
-  },
-
-  space: {
-    answer: 'PULSAR',
-    clues: [
-      {
-        name: 'Antenna Array',
-        title: 'Antenna Array — Transmission Alpha',
-        display: `INCOMING SIGNAL:\n█████████████████████\n\n.--. \n· · ─ ─ · ─ ─ · ─ ─\n\nMorse code received:\n.--.\n\n. = dot\n─ = dash\n\nMorse alphabet:\n.--. = P\n\nVerify:\n. = E (just a dot)\n.--. = P (dot-dash-dash-dot)\n\nConfirmed.\n\nTransmission Alpha\nLetter: P\n\nYour letter: P`,
-        hint: 'Decode the Morse code sequence shown. Each dot (·) and dash (─) combination represents one letter. Look up a Morse code alphabet chart.'
-      },
-      {
-        name: 'Satellite Feed',
-        title: 'Satellite Feed — Transmission Beta',
-        display: `BINARY STREAM RECEIVED:\n\n01010101\n\nConvert to decimal:\n01010101\n= 64+16+4+1\n= 85\n\nASCII table:\n85 = U\n\nBut wait — this is\nNOT ASCII. This station\nuses a custom binary:\n\nSimply count the 1s:\n01010101 has four 1s.\n\n4th letter = D?\n\nNo — count the 0s:\nfour 0s = D?\n\nActually: convert to\ndecimal normally.\n85 = U in ASCII.\n\nTransmission Beta\nLetter: U\n\nYour letter: U`,
-        hint: 'Convert the binary number to decimal using standard binary conversion (128, 64, 32, 16, 8, 4, 2, 1). Then use the ASCII table to find the letter.'
-      },
-      {
-        name: 'Star Chart',
-        title: 'Star Chart — Transmission Gamma',
-        display: `STAR DESIGNATION:\n\nObject: Lambda Orionis\nCatalog #: 12\n\nThe chart shows a\nconstellation cipher:\n\nEach star = one letter.\nStars connected in\norder of brightness\n(magnitude):\n\nBrightest to dimmest:\n★★★ → ★★ → ★\n\nThe 3 brightest stars\nspell (in semaphore\narm positions):\n\nStar cluster forms\nthe letter L in\nflag semaphore.\n\nBut the CATALOG NUMBER\ngives a simpler answer:\n12 = L in A1Z26.\n\nTransmission Gamma\nLetter: L\n\nYour letter: L`,
+        display: `PAGE 23 — ENCRYPTED\n\nCipher: ROT13\n(Shift each letter\n13 positions forward.)\n\nEncrypted entry reads:\n\n  "Gur frperg vf L"\n\nStep 1: Decode the\nfull sentence using\nROT13.\n\nStep 2: The last word\nreveals a letter.\nApply ROT13 once more\nto that letter.\n\nThe result is your answer.`,
         hint: 'The star chart catalog number uses A1Z26. Convert the number directly to its alphabet position to find the letter.'
       },
       {
         name: 'Control Panel',
         title: 'Control Panel — ORDER MAP',
-        display: `SYSTEM STATUS DISPLAY:\n\n▓ SLOT SEQUENCE ▓\n\nCh.1 → Antenna Array\nCh.2 → Satellite Feed\nCh.3 → Star Chart\nCh.4 → Control Panel*\nCh.5 → Data Core\nCh.6 → Telescope Log\n\n*Panel self-reference:\nThe panel display shows\na hexadecimal value:\n0x53\n\nConvert hex to decimal:\n0x53 = 5×16 + 3 = 83\n\nASCII 83 = S\n\nControl Panel\nLetter: S\n\nYour letter: S\n\n(Sequence so far:\nP U L S _ _)`,
+        display: `SYSTEM STATUS DISPLAY:\n\n▓ SLOT SEQUENCE ▓\n\nCh.1 → Antenna Array\nCh.2 → Satellite Feed\nCh.3 → Star Chart\nCh.4 → Control Panel*\nCh.5 → Data Core\nCh.6 → Telescope Log\n\n*Panel self-reference:\nThe panel display shows\na hexadecimal value:\n0x53\n\nConvert hex to decimal:\n0x53 = 5×16 + 3 = 83\n\nASCII 83 = S\n\nConvert 0x53 from hex\nto decimal, then to ASCII.\nThat character is your answer.`,
         hint: 'Convert the hexadecimal value shown on the panel to decimal, then use the ASCII table to find the letter. Remember: hex uses 0-9 and A-F.'
       },
       {
         name: 'Data Core',
         title: 'Data Core — Transmission Epsilon',
-        display: `CORRUPTED DATA LOG:\n\nEntry 001: [REDACTED]\nEntry 002: [REDACTED]\nEntry 003: ERROR\nEntry 004: ERROR\nEntry 005: "A"\n\nThe only readable\nentry is #5.\nEntry 5 = A.\n\nBut the data core\nalso shows the\nStation's coordinates:\n\n65°N, 82°W\n\n65 in A1Z26 wraps:\n65 - 52 = 13 = M?\n\nNo: 65 mod 26 = 13 = M\n\nBut the readable entry\nis cleaner: Entry 5\ncontains letter A.\n\nTransmission Epsilon\nLetter: A\n\nYour letter: A`,
+        display: `CORRUPTED DATA LOG:\n\nEntry 001: [REDACTED]\nEntry 002: [REDACTED]\nEntry 003: ERROR\nEntry 004: ERROR\nEntry 005: "A"\n\nThe only readable\nentry is #5.\nOnly one entry is readable.\nThat entry IS your letter.`,
         hint: 'Focus on the only readable log entry. The data core is corrupted except for one entry that clearly shows a letter. Use that letter.'
       },
       {
         name: 'Telescope Log',
         title: 'Telescope Log — Transmission Zeta',
-        display: `OBSERVATION LOG:\n\nObject observed:\nPSR J0437-4715\n\n"PSR" stands for\npulsating source of\nradio waves.\n\nThe observation angle\nwas recorded as:\n18 degrees\n\n18th letter: R\n\nAdditional notation:\nThe astronomer signed\nwith their initial: R\n\n(Both methods agree.)\n\nTransmission Zeta\nLetter: R\n\nFinal sequence:\nP U L S A R\n\nYour letter: R`,
+        display: `OBSERVATION LOG:\n\nObject observed:\nPSR J0437-4715\n\n"PSR" stands for\npulsating source of\nradio waves.\n\nThe observation angle\nwas recorded as:\n18 degrees\n\n18th letter: R\n\nAdditional notation:\nConvert the angle to\nits A1Z26 letter position.`,
         hint: 'The observation angle is recorded in degrees. Convert that number to a letter using A1Z26 (A=1, B=2... R=18, S=19...). The astronomer initial confirms your answer.'
       }
     ],
@@ -842,37 +746,37 @@ const ROOMS = {
       {
         name: 'Portrait',
         title: 'The Portrait — Clue #1 & ORDER',
-        display: `The portrait frame is\nengraved with numbers.\n\nFRAME INSCRIPTION:\n"Read the rooms thus:\nPortrait · Clock\nMirror · Skull\nLetter · Candle"\n\nSlot 1 → Portrait*\nSlot 2 → Stopped Clock\nSlot 3 → Mirror\nSlot 4 → Skull\nSlot 5 → Letter\nSlot 6 → Melted Candle\n\n*The subject's name\nhas been scratched out.\nOnly the first letter\nof the surname remains:\n\nThe etching shows: W\n(A Victorian W in\ncursive, unmistakable.)\n\nYour letter: W`,
+        display: `The portrait frame is\nengraved with numbers.\n\nFRAME INSCRIPTION:\n"Read the rooms thus:\nPortrait · Clock\nMirror · Skull\nLetter · Candle"\n\nSlot 1 → Portrait*\nSlot 2 → Stopped Clock\nSlot 3 → Mirror\nSlot 4 → Skull\nSlot 5 → Letter\nSlot 6 → Melted Candle\n\n*The subject's name\nhas been scratched out.\nOnly the first letter\nof the surname remains:\n\nThe etching shows one\nlegible letter in\nVictorian cursive.\n\nThat letter is your answer.`,
         hint: 'The portrait frame serves as the order map AND contains the first letter. The scratched nameplate still shows one legible letter in Victorian cursive.'
       },
       {
         name: 'Stopped Clock',
         title: 'The Stopped Clock — Clue #2',
-        display: `The clock stopped at:\n\n  12\n9    3\n  6\n\nHands point to:\nHour hand: between 3 and 4\nMinute hand: exactly on 4\n\nTime frozen: 3:20\n\nA Victorian clockmaker's\ncipher: time → letter\n\nMinutes ÷ 5 = position\n20 ÷ 5 = 4\n\nHmm. But the hour\ngives another clue:\nHour = 3\nMinute mark = 4\n\n3 + 4 = 7?\nNo — the hour hand\npoints BETWEEN 3 and 4.\nSo: position is R?\n\nSimpler method:\nTotal minutes = 3×60+20\n= 200 minutes.\n200 mod 26 = 200-7×26\n= 200-182 = 18 = R\n\nYour letter: R`,
+        display: `The clock stopped at:\n\n  12\n9    3\n  6\n\nHands point to:\nHour hand: between 3 and 4\nMinute hand: exactly on 4\n\nTime frozen: 3:20\n\nA Victorian clockmaker's\ncipher: time → letter\n\nMinutes ÷ 5 = position\n20 ÷ 5 = 4\n\nHmm. But the hour\ngives another clue:\nHour = 3\nMinute mark = 4\n\n3 + 4 = 7?\nNo — the hour hand\npoints BETWEEN 3 and 4.\nSo: position is R?\n\nSimpler method:\nTotal minutes = 3×60+20\n= 200 minutes.\nApply mod 26 to total minutes.\nThat number = your letter.\n(A=1 ... Z=26)`,
         hint: 'Convert the stopped time to total minutes (hours × 60 + minutes). Apply modular arithmetic (mod 26) to get a number 1-26. That is your letter position.'
       },
       {
         name: 'Mirror',
         title: 'The Mirror — Clue #3',
-        display: `The mirror shows\nreversed writing:\n\n∀ IЯЯOЯ ЯOMЯIЯ\n\nWhen held to a mirror\n(or simply reversed):\n\n"A MIRROR MIRROR"\n\nBut what the mirror\nACTUALLY shows is\na letter, written in\nreverse:\n\nThe letter appears as:\nA backwards I\n\nOr: the 9th letter.\n\nI = 9th letter.\n\nYour letter: A\n\nWait — the mirror\nshows everything\nbackwards. The actual\nletter written is:\nA (reflected = A)\nA is palindromic!\n\nYour letter: A`,
+        display: `The mirror shows\nreversed writing:\n\n∀ IЯЯOЯ ЯOMЯIЯ\n\nWhen held to a mirror\n(or simply reversed):\n\n"A MIRROR MIRROR"\n\nBut what the mirror\nACTUALLY shows is\na letter, written in\nreverse:\n\nThe mirrored letter you\nsee IS your answer.\n\nWait — the mirror\nshows everything\nbackwards. The actual\nThe mirrored letter\nyou see IS your answer.`,
         hint: 'The mirror shows reversed text. Reverse it to read normally. The visible letter, when unreversed, is your answer. Some letters look the same in a mirror.'
       },
       {
         name: 'Skull',
         title: 'The Skull — Clue #4',
-        display: `A rolled note sits\ninside the skull's\nempty eye socket.\n\nThe note reads:\n\n"Count my empty sockets.\nNot my teeth —\nmy MISSING teeth.\n\nI have lost exactly\nthese teeth:\n- 3 upper molars\n- 2 lower molars\n- 4 front incisors\n\nCount only the front\nincisors that are gone.\n\n4 missing incisors.\n\nBut the note adds:\n'Subtract one for\nthe tooth I kept.'\n\n4 - 1 = 3? No.\n\nRead again carefully:\n'Count ALL missing teeth\nthen find the square.'\n\nTotal missing:\n3 + 2 + 4 = 9\n\nSquare root of 9 = 3?\nNo — the number IS\nyour letter position.\n\n9th letter = I\n\nYour letter: I`,
+        display: `A rolled note sits\ninside the skull's\nempty eye socket.\n\nThe note reads:\n\n"Count my empty sockets.\nNot my teeth —\nmy MISSING teeth.\n\nI have lost exactly\nthese teeth:\n- 3 upper molars\n- 2 lower molars\n- 4 front incisors\n\nCount only the front\nincisors that are gone.\n\n4 missing incisors.\n\nBut the note adds:\n'Subtract one for\nthe tooth I kept.'\n\n4 - 1 = 3? No.\n\nRead again carefully:\n'Count ALL missing teeth\nthen find the square.'\n\nTotal missing:\n3 + 2 + 4 = 9\n\nThat total count is\nyour letter position.\n(A=1, B=2 ... Z=26)`,
         hint: 'Count the teeth that remain in the skull (32 minus what is described as missing). The note gives you additional instructions on what to do with that count to find the letter number.'
       },
       {
         name: 'Letter',
         title: 'The Sealed Letter — Clue #5',
-        display: `The wax seal is broken.\nThe letter inside reads:\n\n"Dearest [REDACTED],\n\nBy the time you read\nthis, I shall be gone.\nThe secret I carry\nto my grave is thus:\n\nIn the Playfair cipher,\nusing key BLACKWOOD,\nmy letter encodes as:\n\n  TH → MN\n\nBut I only need one.\nThe first of the pair.\n\nT encoded in the\nPlayfair square using\nkey BLACKWOOD...\n\nYour cipher skills\nmust solve this fully.\nThe answer is T.\n\nYour letter: T",`,
+        display: `The wax seal is broken.\nThe letter inside reads:\n\n"Dearest [REDACTED],\n\nBy the time you read\nthis, I shall be gone.\nThe secret I carry\nto my grave is thus:\n\nIn the Playfair cipher,\nusing key BLACKWOOD,\nmy letter encodes as:\n\n  TH → MN\n\nBut I only need one.\nThe first of the pair.\n\nT encoded in the\nPlayfair square using\nkey BLACKWOOD...\n\nYour cipher skills\nmust solve this fully.\nCipher: PLAYFAIR\nKey: BLACKWOOD\nEncoded pair: MN\nDecode it. Take first letter.",`,
         hint: 'This uses the Playfair cipher with the key BLACKWOOD. Build the 5×5 Playfair square, then encode the given letter. Alternatively, the letter itself tells you the answer directly — read it carefully.'
       },
       {
         name: 'Melted Candle',
         title: 'The Melted Candle — Clue #6',
-        display: `The candle has burned\ninto a shape.\n\nWax drips spell:\n\n・ ・ ・ ・\n━\n・ ・ ・ ・\n\n4 dots\n1 dash\n4 dots\n\nMorse: .... ─ ....\n\n.... = H\n─   = T\n.... = H\n\nHTH? No — this is\none letter, not three.\nThe WAX SHAPE itself\nforms the letter:\n\nFour drips left,\none across, four right.\nLike the letter H.\n\nH = 8th letter.\n\nYour letter: H\n\nFinal sequence:\nW R A I T H\n\n= WRAITH`,
+        display: `The candle has burned\ninto a shape.\n\nWax drips spell:\n\n・ ・ ・ ・\n━\n・ ・ ・ ・\n\n4 dots\n1 dash\n4 dots\n\nMorse: .... ─ ....\n\n.... = H\n─   = T\n.... = H\n\nHTH? No — this is\none letter, not three.\nThe WAX SHAPE itself\nforms the letter:\n\nFour drips left,\none across, four right.\nLike the letter H.\n\nRead the wax shape as a letter.\nThat is your answer.`,
         hint: 'The wax drip pattern forms both a Morse code sequence and a visual shape. Both should point to the same letter. Trust the simpler interpretation.'
       }
     ],
