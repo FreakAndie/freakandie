@@ -740,7 +740,7 @@ const ROOMS = {
       {
         name: 'Scroll I',
         title: 'Scroll I — The Atbash Cipher',
-        display: `Ancient text reads:\n\n"Gsv kilksvg hzbh gsv\nulibwwvm dliu rh...\nLnrxlim"\n\nAtbash Cipher:\nA↔Z, B↔Y, C↔X...\nReverse the alphabet.\n\nG→T, s→h, v→e...\n"The prophet says the\nforbidden word is...\nOmicron"\n\nBut the scroll is\npartially burned.\nOnly the FIRST letter\nof the last word\nsurvives clearly: O\n\nYour letter: O`,
+        display: `Ancient text reads:\n\n"Gsv kilksvg hzbh gsv\nulibwwvm dliu rh...\nLnrxilm"\n\nAtbash Cipher:\nA↔Z, B↔Y, C↔X...\nReverse the alphabet.\n\nL→O, n→m, r→i...\n"The prophet says the\nforbidden word is...\nOmicron"\n\nVerify: Atbash each\nletter of LNRXILM:\nL=12 → Z-12+1=O\nN=14 → Z-14+1=M\nR=18 → Z-18+1=I\nX=24 → Z-24+1=C\nI=9  → Z-9+1=R\nL=12 → Z-12+1=O\nM=13 → Z-13+1=N\n\n= O M I C R O N ✓\n\nFirst letter: O\n\nYour letter: O`,
         hint: 'Atbash cipher: reverse the alphabet. A becomes Z, B becomes Y, and so on. Decode the scroll to find the first letter of the hidden word.'
       },
       {
@@ -758,13 +758,13 @@ const ROOMS = {
       {
         name: 'Candelabra',
         title: 'The Candelabra — Clue #4',
-        display: `The candles burned down\nto different heights.\nRead them left to right\nas a number sequence:\n\nTall=1, Medium=2, Short=3\n\nCandle heights:\n3  1  1\n\nThis is a pigpen cipher\nkey number: 311\n\nActually — simpler.\nCount the candles that\nare STILL LIT: 3\nCount the candles that\nare BURNED OUT: 1\n\n3 lit + 1 out = C (3rd letter)\n\nWait — burned out ones\ngive the letter:\n1 burned = A\n\nThe candelabra has\nexactly 1 snuffed candle.\n\nA = 1st letter.\n\nYour letter: C`,
+        display: `The candelabra holds\n5 candles total.\n\nCount how many are\nSTILL LIT:\n\n█ █ █ ░ ░\n(█=lit, ░=burned out)\n\n3 candles still lit.\n2 burned out.\n\nThe cipher rule\nengraved on the base:\n\n"Count the living flames.\nThat number is your\nposition in the alphabet."\n\n3 lit flames = 3rd letter\n\nA=1, B=2, C=3\n\nYour letter: C`,
         hint: 'Count specifically the candles that have burned out (not lit). That count gives you a number. That number corresponds to a letter position in the alphabet.'
       },
       {
         name: 'Codex',
         title: 'The Codex — ORDER & Clue #5',
-        display: `CODEX PAGE — THE ORDER:\n\nSlot 1 → Scroll I\nSlot 2 → Ancient Urn\nSlot 3 → Brass Key\nSlot 4 → Candelabra\nSlot 5 → Codex*\nSlot 6 → Stone Tablet\nSlot 7 → Scales\n\n*This slot: The Codex\ncontains a Caesar cipher.\nShift = 18.\n\nEncrypted: R\n\nShift R back 18:\nR=18, 18-18=0...\nWrap: 26+0=26=Z?\n\nNo — shift FORWARD 18:\nR(18) + 18 = 36\n36 mod 26 = 10 = J?\n\nActually shift letter\nBACKWARDS by 18:\nR is the 18th letter.\n18 - 18 = 0 → Z (26th)?\n\nTry: forward by 18.\nR→ count 18 forward:\nR S T U V W X Y Z A B C\n1 2 3 4 5 6 7 8 9 0 1 2...\n= 12th from R = R+18 = letter?\nR=18, 18+18=36, 36-26=10=J\n\nHmm. Try shift 8 back:\nR(18)-8=10=J? No...\n\nCaesar shift 18 back:\nA=1... R=18. 18-18=0→Z=26.\n\nYour letter: R`,
+        display: `CODEX PAGE — THE ORDER:\n\nSlot 1 → Scroll I\nSlot 2 → Ancient Urn\nSlot 3 → Brass Key\nSlot 4 → Candelabra\nSlot 5 → Codex*\nSlot 6 → Stone Tablet\nSlot 7 → Scales\n\n*This slot: The Codex\ncontains a Caesar cipher.\nShift = 18 BACKWARD.\n\nEncrypted letter: J\n\nTo decode: shift J\nbackward by 18 positions.\n\nJ is the 10th letter.\n10 - 18 = -8\nWrap around: -8 + 26 = 18\n18th letter = R\n\nVerify by encoding:\nR(18) + 18 = 36\n36 mod 26 = 10 = J ✓\n\nSo J decoded = R\n\nYour letter: R`,
         hint: 'The Codex uses a Caesar cipher with shift 18. The encrypted letter is shown. Shift it backwards by 18 positions in the alphabet, wrapping around if needed.'
       },
       {
@@ -860,7 +860,7 @@ const ROOMS = {
       {
         name: 'Skull',
         title: 'The Skull — Clue #4',
-        display: `A rolled note sits\ninside the skull's\nempty eye socket.\n\nThe note reads:\n\n"Count my teeth.\nThat is your number.\n\nI have all my teeth\nsave for these:\n- 4 upper front\n- 4 lower front\nmissing (the incisors).\n\nA full skull has 32.\nMinus 8 = 24 teeth.\n\n24th letter: X\n\nBut wait — the note\ncontinues:\n\n'Halve the count.\nI am but half gone.'\n\n24 ÷ 2 = 12 = L?\n\nNo: 'half gone' means\nhalf my teeth remain:\n32 ÷ 2 = 16 = P? No.\n\n24 present = X? Or\nthe 9th letter?\n\n'I am but half gone'\n→ 9th letter = I\n\nYour letter: I`,
+        display: `A rolled note sits\ninside the skull's\nempty eye socket.\n\nThe note reads:\n\n"Count my empty sockets.\nNot my teeth —\nmy MISSING teeth.\n\nI have lost exactly\nthese teeth:\n- 3 upper molars\n- 2 lower molars\n- 4 front incisors\n\nCount only the front\nincisors that are gone.\n\n4 missing incisors.\n\nBut the note adds:\n'Subtract one for\nthe tooth I kept.'\n\n4 - 1 = 3? No.\n\nRead again carefully:\n'Count ALL missing teeth\nthen find the square.'\n\nTotal missing:\n3 + 2 + 4 = 9\n\nSquare root of 9 = 3?\nNo — the number IS\nyour letter position.\n\n9th letter = I\n\nYour letter: I`,
         hint: 'Count the teeth that remain in the skull (32 minus what is described as missing). The note gives you additional instructions on what to do with that count to find the letter number.'
       },
       {
